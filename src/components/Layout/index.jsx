@@ -2,12 +2,17 @@ import React from "react";
 import Footer from "../Footer";
 import Header from "../Header";
 
-function Layout() {
+const PageWrapper = ({ children }) => <div className="d-flex flex-column min-vh-100">{children}</div>;
+
+const MainContent = ({ children }) => <main className="flex-grow-1 container py-3">{children}</main>;
+
+function Layout({ children }) {
   return (
-    <>
+    <PageWrapper>
       <Header />
+      <MainContent>{children}</MainContent>
       <Footer />
-    </>
+    </PageWrapper>
   );
 }
 
