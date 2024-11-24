@@ -1,0 +1,31 @@
+.footer {
+  background-color: #566d8c;
+  color: white;
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-logo {
+  max-width: 100px;
+  height: auto;
+}
+
+.footer-link {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+  color: white;
+}
+
+.footer-contact {
+  text-align: left;
+}
+
+.footer p {
+  margin-bottom: 2px;
+}

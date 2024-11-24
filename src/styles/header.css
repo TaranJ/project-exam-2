@@ -1,0 +1,22 @@
+.custom-navbar {
+  background-color: #566d8c;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  padding: 0 1rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav .nav-link {
+  padding-bottom: 0;
+  color: white;
+  padding-top: 50px;
+  font-weight: 300;
+}
+
+.navbar-nav .nav-link:hover {
+  color: rgb(199, 199, 199);
+}

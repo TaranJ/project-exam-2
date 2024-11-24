@@ -1,0 +1,20 @@
+.hero-section {
+  position: relative;
+}
+
+.hero-overlay {
+  position: absolute;
+  bottom: 10%;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.cta-button {
+  background-color: #58735f;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 200;
+  padding: 5px 40px;
+}
