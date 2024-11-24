@@ -1,1 +1,38 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100;1,100&family=Oxygen:wght@300;400;700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
+
+body {
+  font-family: Roboto Condensed, sans-serif;
+}
+
+.footer {
+  background-color: #566d8c;
+  color: white;
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-logo {
+  max-width: 100px;
+  height: auto;
+}
+
+.footer-link {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+  color: white;
+}
+
+.footer-contact {
+  text-align: left;
+}
+
+.footer p {
+  margin-bottom: 2px;
+}

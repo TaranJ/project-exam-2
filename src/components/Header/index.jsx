@@ -1,12 +1,14 @@
 import React from "react";
-
 import { Navbar, Nav, Container } from "react-bootstrap";
+import logo from "../../images/logo-holidaze.png";
 
 function Header() {
   return (
     <Navbar style={{ backgroundColor: "#566D8C" }} variant="dark" expand="lg">
       <Container fluid>
-        <Navbar.Brand href="#home">Holidaze</Navbar.Brand>
+        <Navbar.Brand href="#home">
+          <img src={logo} alt="Holidaze Logo" className="navbar-logo" />
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
