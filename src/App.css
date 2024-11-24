@@ -1,42 +1,69 @@
-#root {
-  max-width: 1280px;
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100;1,100&family=Oxygen:wght@300;400;700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
+
+body {
+  font-family: Roboto Condensed, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: Oxygen, sans-serif;
+}
+
+.custom-navbar {
+  background-color: #566d8c;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  padding: 0 1rem;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  display: flex;
+  align-items: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.navbar-nav .nav-link {
+  padding-bottom: 0;
+  color: white;
+  padding-top: 50px;
+  font-weight: 300;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.navbar-nav .nav-link:hover {
+  color: rgb(199, 199, 199);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.footer {
+  background-color: #566d8c;
+  color: white;
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.card {
-  padding: 2em;
+.footer-logo {
+  max-width: 100px;
+  height: auto;
 }
 
-.read-the-docs {
-  color: #888;
+.footer-link {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+  color: white;
+}
+
+.footer-contact {
+  text-align: left;
+}
+
+.footer p {
+  margin-bottom: 2px;
 }
