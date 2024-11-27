@@ -22,3 +22,5 @@ export const fetchVenueById = async (id) => {
   const URL = `${import.meta.env.VITE_APIBase}holidaze/venues/${id}`;
   return fetchData(URL);
 };
+
+const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYWxidXMiLCJlbWFpbCI6ImFsYnVzQG5vcm9mZi5ubyIsImlhdCI6MTczMjczODk5OX0.NwbO6JMc1G8jH_rc634amkcLbr_icSVBDKxrVaegOcM`;
