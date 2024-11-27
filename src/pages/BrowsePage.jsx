@@ -1,25 +1,62 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
+import { searchVenues } from "../utils/search";
 import { fetchVenues } from "../utils/api";
 import heroImage from "../images/hotel-1831072_1920.jpg";
 
 function BrowsePage() {
   const [venues, setVenues] = useState([]);
   const [visibleVenues, setVisibleVenues] = useState(15);
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getVenues = async () => {
       try {
-        const fetchedVenues = await fetchVenues();
-        console.log("Fetched venues:", fetchedVenues);
+        setLoading(true);
+        const fetchedVenues = await fetchVenues("");
         setVenues(fetchedVenues.data);
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
         console.error("Error in fetching venues:", error);
       }
     };
 
     getVenues();
   }, []);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+
+    // If the search query is empty, fetch all venues
+    if (query.trim() === "") {
+      setLoading(true);
+      try {
+        const fetchedVenues = await fetchVenues();
+        setVenues(fetchedVenues.data);
+        setVisibleVenues(15);
+      } catch (error) {
+        console.error("Error fetching venues:", error);
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
+    // Otherwise, perform a search
+    setLoading(true);
+    try {
+      const searchedVenues = await searchVenues(query);
+      setVenues(searchedVenues.data);
+      setVisibleVenues(15);
+    } catch (error) {
+      console.error("Error in search:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleViewMore = () => {
     setVisibleVenues((prev) => prev + 15);
@@ -40,10 +77,10 @@ function BrowsePage() {
         }}
       >
         <div className="hero-overlay d-flex align-items-center justify-content-center">
-          <Form className="w-75">
+          <Form onSubmit={handleSearch} className="w-75">
             <Row>
               <Col className="col-9">
-                <Form.Control type="text" placeholder="Search for accommodations" />
+                <Form.Control type="text" placeholder="Search for accommodations" value={query} onChange={(e) => setQuery(e.target.value)} />
               </Col>
               <Col>
                 <Button variant="primary" type="submit" className="cta-button search-btn">
@@ -75,13 +112,17 @@ function BrowsePage() {
                           {venue.description.length > 100 ? venue.description.slice(0, 100) + "..." : venue.description}
                         </p>
                         <p className="mb-3">Price: {venue.price} NOK</p>
-                        <Button href={`/venue/${venue.id}`} variant="primary" className="cta-button">
-                          Book
-                        </Button>
+                        <Link to={`/venue/${venue.id}`}>
+                          <Button variant="primary" className="cta-button">
+                            Book
+                          </Button>
+                        </Link>
                       </div>
                     </div>
                     <div className="col-12 col-md-7">
-                      <img src={venue.media[0]?.url} className="browse-img" alt={venue.name} />
+                      <Link to={`/venue/${venue.id}`}>
+                        <img src={venue.media[0]?.url} className="browse-img" alt={venue.name} />
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -92,7 +133,7 @@ function BrowsePage() {
         {/* View More Button */}
         {venues.length > visibleVenues && (
           <div className="text-center mt-4">
-            <Button variant="outline-primary" onClick={handleViewMore}>
+            <Button variant="outline-primary" className="cta-button" onClick={handleViewMore}>
               View More
             </Button>
           </div>
