@@ -1,6 +1,11 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100;1,100&family=Oxygen:wght@300;400;700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
 
+@import "/src/styles/header.css";
+@import "/src/styles/footer.css";
+@import "/src/styles/homepage.css";
+@import "/src/styles/browsepage.css";
+
 body {
   font-family: Roboto Condensed, sans-serif;
 }
@@ -11,59 +16,4 @@ h3,
 h4,
 h5 {
   font-family: Oxygen, sans-serif;
-}
-
-.custom-navbar {
-  background-color: #566d8c;
-}
-
-.navbar-container {
-  max-width: 1200px;
-  padding: 0 1rem;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-}
-
-.navbar-nav .nav-link {
-  padding-bottom: 0;
-  color: white;
-  padding-top: 50px;
-  font-weight: 300;
-}
-
-.navbar-nav .nav-link:hover {
-  color: rgb(199, 199, 199);
-}
-
-.footer {
-  background-color: #566d8c;
-  color: white;
-  padding: 20px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.footer-logo {
-  max-width: 100px;
-  height: auto;
-}
-
-.footer-link {
-  color: white;
-  text-decoration: none;
-}
-
-.footer-link:hover {
-  text-decoration: underline;
-  color: white;
-}
-
-.footer-contact {
-  text-align: left;
-}
-
-.footer p {
-  margin-bottom: 2px;
 }

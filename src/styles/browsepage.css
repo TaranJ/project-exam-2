@@ -1,0 +1,21 @@
+.search-section {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+}
+
+.browsepage {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.browse-img {
+  max-height: 400px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.search-btn {
+  color: black;
+  background-color: #b6ab6f;
+}
