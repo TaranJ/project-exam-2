@@ -1,7 +1,5 @@
-const URL = "https://v2.api.noroff.dev/holidaze/venues";
-
-// Function to fetch all products from the API
 export const fetchVenues = async () => {
+  const URL = import.meta.env.VITE_APIBase + "holidaze/venues";
   try {
     const response = await fetch(URL);
     if (!response.ok) {

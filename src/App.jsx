@@ -10,6 +10,8 @@ import HomePage from "./pages/HomePage";
 import BrowsePage from "./pages/BrowsePage";
 import ProfilePage from "./pages/ProfilePage";
 import AboutPage from "./pages/AboutPage";
+import RegisterPage from "./pages/RegisterPage";
+import VenuePage from "./pages/VenuePage";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="/browse" element={<BrowsePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/venue/:id" element={<VenuePage />} />
         </Routes>
       </Layout>
     </Router>
