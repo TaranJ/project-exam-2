@@ -119,7 +119,7 @@ const ProfilePage = () => {
           <Row className="mb-4">
             <Col>
               <h4>Venue Manager</h4>
-              <p>You currently manage {userVenues.length} venues.</p>
+              <p>You currently manage {profile._count.venues} venues.</p>
             </Col>
           </Row>
 

@@ -15,7 +15,7 @@ export const fetchVenueById = async (id) => {
 export const fetchVenuesForManager = async (managerName) => {
   const token = load("token");
   const apiKey = import.meta.env.VITE_APIKey;
-  const url = `${import.meta.env.VITE_APIBase}holidaze/venues?manager.name=${managerName}`;
+  const url = `${import.meta.env.VITE_APIBase}holidaze/venues?_owner=true`;
 
   try {
     const response = await fetch(url, {
@@ -25,21 +25,18 @@ export const fetchVenuesForManager = async (managerName) => {
         "X-Noroff-API-Key": apiKey,
       },
     });
-
-    if (response.status === 429) {
-      // Handle rate-limiting error (status 429)
-      console.error("API rate limit exceeded. Try again later.");
-      return []; // Return an empty array or handle retry logic here
-    }
-
     if (!response.ok) {
-      throw new Error("Failed to fetch venues");
+      throw new Error(`Failed to fetch venues: ${response.statusText}`);
     }
 
-    const data = await response.json();
-    return data;
+    const venues = await response.json();
+    const venueList = Array.isArray(venues) ? venues : venues.data || [];
+    const filteredVenues = venueList.filter((venue) => venue.owner?.name === managerName);
+
+    console.log("Filtered venues for manager:", filteredVenues);
+    return filteredVenues;
   } catch (error) {
     console.error("Error fetching venues:", error);
-    return []; // Return empty array in case of error
+    return [];
   }
 };
