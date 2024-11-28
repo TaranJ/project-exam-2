@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
 import { searchVenues } from "../utils/search";
-import { fetchVenues } from "../utils/api";
+import { fetchVenues } from "../utils/api/fetchvenues";
 import heroImage from "../images/hotel-1831072_1920.jpg";
 
 function BrowsePage() {

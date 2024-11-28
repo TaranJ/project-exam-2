@@ -5,6 +5,7 @@
 @import "/src/styles/footer.css";
 @import "/src/styles/homepage.css";
 @import "/src/styles/browsepage.css";
+@import "/src/styles/venuepage.css";
 
 body {
   font-family: Roboto Condensed, sans-serif;

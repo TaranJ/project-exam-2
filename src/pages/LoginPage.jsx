@@ -16,7 +16,7 @@ function LoginPage() {
     try {
       const response = await loginUser(email, password);
       console.log("Login successful:", response);
-      // Redirect to another page (e.g., dashboard, home)
+      window.location.href = "/";
     } catch (error) {
       setError("Invalid email or password");
     } finally {

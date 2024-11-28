@@ -1,0 +1,86 @@
+.venue-page {
+  padding: 20px 0;
+}
+
+.book-btn {
+  padding: 5px 70px;
+}
+
+@media screen and (min-width: 769px) {
+  .venue-details {
+    margin-left: auto;
+    max-width: 350px;
+  }
+}
+
+/* Calendar Container */
+.calendar-container {
+  margin-top: 50px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading */
+.calendar-container h4 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Display two calendars side by side */
+.calendar-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap; /* Ensures they stack on smaller screens */
+}
+
+/* Individual Calendar styling */
+.react-calendar {
+  width: 100%;
+  max-width: 450px; /* Max width for each calendar */
+  background-color: transparent;
+  box-shadow: none;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+/* Disable Date Style */
+.react-calendar__tile--disabled {
+  background-color: #f0f0f0 !important;
+  color: #ccc !important;
+  pointer-events: none;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: line-through; /* To clearly show unavailable dates */
+}
+
+/* Active (Selected) Date Style */
+.react-calendar__tile--active {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+/* Add Custom Color for Booked Dates */
+.react-calendar__tile--disabled {
+  background-color: #ffcccc !important; /* Light Red for booked dates */
+  color: #fff !important;
+  font-weight: bold;
+}
+
+.react-calendar__tile--disabled:hover {
+  background-color: #ff7f7f !important; /* Darker red on hover for clarity */
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .calendar-wrapper {
+    flex-direction: column;
+  }
+
+  .react-calendar {
+    max-width: 100%; /* Calendar should take full width on smaller screens */
+  }
+}
