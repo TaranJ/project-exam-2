@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Container, Row, Col } from "react-bootstrap";
+import { Button, Container, Row, Col, Modal, Form } from "react-bootstrap";
 import Calendar from "react-calendar";
 // import "react-calendar/dist/Calendar.css";
 import { fetchVenueById, fetchBookingsForVenue } from "../utils/api";
+import { createBooking } from "../utils/api/createbooking";
 
 function VenuePage() {
   const { id } = useParams();
+
+  // State for venue data
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // State for booked dates and selected dates
   const [bookedDates, setBookedDates] = useState([]);
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [checkOutDate, setCheckOutDate] = useState(null);
+  const [numberOfGuests, setNumberOfGuests] = useState(1);
+
+  // State for showing and hiding the booking modal
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const getVenueAndBookings = async () => {
@@ -60,6 +71,56 @@ function VenuePage() {
     return bookedDates.some((bookedDate) => bookedDate.toDateString() === date.toDateString());
   };
 
+  // Handle check-in date selection
+  const handleCheckInChange = (date) => {
+    setCheckInDate(date);
+    if (checkOutDate && date >= checkOutDate) {
+      setCheckOutDate(null);
+    }
+  };
+
+  // Handle check-out date selection
+  const handleCheckOutChange = (date) => {
+    if (date > checkInDate) {
+      setCheckOutDate(date);
+    }
+  };
+
+  // Open the booking modal
+  const openBookingModal = () => {
+    if (!checkInDate || !checkOutDate) {
+      alert("Please select both check-in and check-out dates.");
+      return;
+    }
+    setShowModal(true);
+  };
+
+  const handleBookingSubmit = async () => {
+    const guests = Number(numberOfGuests);
+
+    if (isNaN(guests) || guests <= 0) {
+      alert("Please enter a valid number of guests.");
+      return;
+    }
+
+    try {
+      const bookingDetails = {
+        dateFrom: checkInDate,
+        dateTo: checkOutDate,
+        guests,
+        venueId: id,
+      };
+
+      const bookingResponse = await createBooking(bookingDetails);
+      console.log("Booking successful:", bookingResponse);
+      setShowModal(false); // Close the modal after successful booking
+      alert("Booking successful!");
+    } catch (error) {
+      console.error("Booking failed:", error);
+      alert("Error creating booking. Please try again.");
+    }
+  };
+
   return (
     <div className="venue-page">
       <Container className="my-5" style={{ maxWidth: "1200px" }}>
@@ -96,21 +157,51 @@ function VenuePage() {
           </Col>
         </Row>
         <div className="mt-5 text-center">
-          <Button variant="primary" size="lg" className="cta-button book-btn">
+          <Button variant="primary" size="lg" className="cta-button book-btn" onClick={openBookingModal}>
             Book
           </Button>
         </div>
         <div className="calendar-container mt-5">
-          <h4 className="text-center mb-3">Available Dates</h4>
+          <h4 className="text-center mb-3">Select Your Stay Dates</h4>
           {/* Wrapper for two calendars */}
           <div className="calendar-wrapper">
-            <Calendar minDate={new Date()} tileDisabled={isDateUnavailable} />
-            <Calendar minDate={new Date()} tileDisabled={isDateUnavailable} />
+            <div className="calendar">
+              <h5>Check-in Date</h5>
+              <Calendar minDate={new Date()} value={checkInDate} onChange={handleCheckInChange} tileDisabled={isDateUnavailable} />
+            </div>
+            <div className="calendar">
+              <h5>Check-out Date</h5>
+              <Calendar minDate={checkInDate || new Date()} value={checkOutDate} onChange={handleCheckOutChange} tileDisabled={isDateUnavailable} />
+            </div>
           </div>
         </div>
       </Container>
+      {/* Booking Modal */}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Booking Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Check-in Date</Form.Label>
+              <Form.Control type="text" value={checkInDate?.toLocaleDateString()} readOnly />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Check-out Date</Form.Label>
+              <Form.Control type="text" value={checkOutDate?.toLocaleDateString()} readOnly />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Number of Guests</Form.Label>
+              <Form.Control type="number" min="1" value={numberOfGuests} onChange={(e) => setNumberOfGuests(e.target.value)} />
+            </Form.Group>
+            <Button variant="primary" onClick={handleBookingSubmit}>
+              Confirm Booking
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
-
 export default VenuePage;

@@ -51,6 +51,7 @@ export const fetchBookingsForVenue = async (venueId) => {
     }
 
     const data = await response.json();
+    console.log(data);
 
     if (data && Array.isArray(data.data)) {
       const venueBookings = data.data.filter((booking) => booking.venue.id === venueId);
