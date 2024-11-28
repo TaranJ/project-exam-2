@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Button, Container, Row, Col, Modal, Form } from "react-bootstrap";
 import Calendar from "react-calendar";
 // import "react-calendar/dist/Calendar.css";
-import { fetchVenueById, fetchBookingsForVenue } from "../utils/api";
+import { fetchBookingsForVenue } from "../utils/api/fetchbookings";
 import { createBooking } from "../utils/api/createbooking";
+import { load } from "../utils/storage/load";
+import { fetchVenueById } from "../utils/api/fetchvenues";
 
 function VenuePage() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   // State for venue data
   const [venue, setVenue] = useState(null);
@@ -23,27 +26,35 @@ function VenuePage() {
   // State for showing and hiding the booking modal
   const [showModal, setShowModal] = useState(false);
 
+  const token = load("token");
+
   useEffect(() => {
     const getVenueAndBookings = async () => {
       try {
         setLoading(true);
-        const [fetchedVenue, bookings] = await Promise.all([fetchVenueById(id), fetchBookingsForVenue(id)]);
 
+        // Fetch venue data, regardless of login state
+        const fetchedVenue = await fetchVenueById(id);
         setVenue(fetchedVenue.data);
 
-        const unavailableDates = bookings.flatMap((booking) => {
-          const dateFrom = new Date(booking.dateFrom);
-          const dateTo = new Date(booking.dateTo);
-          const datesInRange = [];
+        // If there's no token, we skip fetching bookings data
+        if (token) {
+          const bookings = await fetchBookingsForVenue(id);
 
-          for (let d = dateFrom; d <= dateTo; d.setDate(d.getDate() + 1)) {
-            datesInRange.push(new Date(d));
-          }
+          const unavailableDates = bookings.flatMap((booking) => {
+            const dateFrom = new Date(booking.dateFrom);
+            const dateTo = new Date(booking.dateTo);
+            const datesInRange = [];
 
-          return datesInRange;
-        });
+            for (let d = dateFrom; d <= dateTo; d.setDate(d.getDate() + 1)) {
+              datesInRange.push(new Date(d));
+            }
 
-        setBookedDates(unavailableDates);
+            return datesInRange;
+          });
+
+          setBookedDates(unavailableDates);
+        }
       } catch (error) {
         setError("Error fetching venue or bookings");
         console.error(error);
@@ -53,7 +64,7 @@ function VenuePage() {
     };
 
     getVenueAndBookings();
-  }, [id]);
+  }, [id, token]);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -92,6 +103,13 @@ function VenuePage() {
       alert("Please select both check-in and check-out dates.");
       return;
     }
+
+    if (!token) {
+      alert("You must be logged in to make a booking.");
+      navigate("/login"); // Redirect to login page if not logged in
+      return;
+    }
+
     setShowModal(true);
   };
 
@@ -156,25 +174,34 @@ function VenuePage() {
             </h3>
           </Col>
         </Row>
-        <div className="mt-5 text-center">
-          <Button variant="primary" size="lg" className="cta-button book-btn" onClick={openBookingModal}>
-            Book
-          </Button>
-        </div>
-        <div className="calendar-container mt-5">
-          <h4 className="text-center mb-3">Select Your Stay Dates</h4>
-          {/* Wrapper for two calendars */}
-          <div className="calendar-wrapper">
-            <div className="calendar">
-              <h5>Check-in Date</h5>
-              <Calendar minDate={new Date()} value={checkInDate} onChange={handleCheckInChange} tileDisabled={isDateUnavailable} />
+        {token && (
+          <>
+            <div className="mt-5 text-center">
+              <Button variant="primary" size="lg" className="cta-button book-btn" onClick={openBookingModal}>
+                Book
+              </Button>
             </div>
-            <div className="calendar">
-              <h5>Check-out Date</h5>
-              <Calendar minDate={checkInDate || new Date()} value={checkOutDate} onChange={handleCheckOutChange} tileDisabled={isDateUnavailable} />
+            <div className="calendar-container mt-5">
+              <h4 className="text-center mb-3">Select Your Stay Dates</h4>
+              {/* Wrapper for two calendars */}
+              <div className="calendar-wrapper">
+                <div className="calendar">
+                  <h5>Check-in Date</h5>
+                  <Calendar minDate={new Date()} value={checkInDate} onChange={handleCheckInChange} tileDisabled={isDateUnavailable} />
+                </div>
+                <div className="calendar">
+                  <h5>Check-out Date</h5>
+                  <Calendar
+                    minDate={checkInDate || new Date()}
+                    value={checkOutDate}
+                    onChange={handleCheckOutChange}
+                    tileDisabled={isDateUnavailable}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </Container>
       {/* Booking Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>

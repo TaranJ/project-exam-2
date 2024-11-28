@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import heroImage from "../images/ai-generated-8774912_1920.jpg";
-import { fetchVenues } from "../utils/api";
+import { fetchVenues } from "../utils/api/fetchvenues";
 
 function HomePage() {
   const [venues, setVenues] = useState([]);
