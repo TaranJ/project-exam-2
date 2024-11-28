@@ -3,9 +3,12 @@ import { Container, Row, Col, Button, Image, Modal, Form } from "react-bootstrap
 import { load } from "../utils/storage/load";
 import { fetchAllBookingsForUser } from "../utils/api/fetchbookings";
 import { updateProfile } from "../utils/api/updateprofile";
+import { fetchVenuesForManager } from "../utils/api/fetchvenues";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const [userBookings, setUserBookings] = useState([]);
+  const [userVenues, setUserVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [updatedProfile, setUpdatedProfile] = useState({
@@ -14,35 +17,54 @@ const ProfilePage = () => {
   });
 
   const profile = load("profile");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const getUserBookings = async () => {
-      const email = profile?.email;
-      if (!email) return [];
+    const getUserData = async () => {
+      if (!profile) return;
 
-      const allBookings = await fetchAllBookingsForUser();
-      const userBookings = allBookings.filter((booking) => booking.customer.email === email);
+      if (!updatedProfile.bio) {
+        setUpdatedProfile((prev) => ({
+          ...prev,
+          bio: profile.bio || "",
+          avatar: {
+            url: profile.avatar?.url || "",
+            alt: profile.avatar?.alt || "",
+          },
+        }));
+      }
 
-      setUserBookings(userBookings);
+      if (profile?.venueManager && userVenues.length === 0) {
+        try {
+          const venues = await fetchVenuesForManager(profile.name);
+          if (venues.length > 0) {
+            setUserVenues(venues);
+          }
+        } catch (err) {
+          console.error("Error fetching venues:", err);
+        }
+      } else if (!profile?.venueManager && userBookings.length === 0) {
+        try {
+          const allBookings = await fetchAllBookingsForUser();
+          const userBookings = allBookings.filter((booking) => booking.customer.email === profile.email);
+          if (userBookings.length > 0) {
+            setUserBookings(userBookings);
+          }
+        } catch (err) {
+          console.error("Error fetching bookings:", err);
+        }
+      }
+
       setLoading(false);
     };
 
-    if (profile) {
-      setUpdatedProfile({
-        bio: profile.bio || "",
-        avatar: {
-          url: profile.avatar?.url || "",
-        },
-      });
-    }
-
-    getUserBookings();
-  }, []);
+    getUserData();
+  }, [profile?.name, profile?.venueManager, userVenues.length, userBookings.length]);
 
   const handleSubmit = async () => {
     try {
       const newProfile = await updateProfile(profile.name, updatedProfile);
-      setShowModal(false); // Close the modal
+      setShowModal(false);
       alert("Profile updated successfully");
     } catch (error) {
       alert("Failed to update profile. Please try again.");
@@ -63,6 +85,10 @@ const ProfilePage = () => {
     } else {
       setUpdatedProfile((prev) => ({ ...prev, [name]: value }));
     }
+  };
+
+  const handleCreateVenue = () => {
+    navigate("/new-venue");
   };
 
   return (
@@ -87,26 +113,70 @@ const ProfilePage = () => {
           </p>
         </Col>
       </Row>
+      {profile?.venueManager ? (
+        <>
+          {/* Venue Manager Section */}
+          <Row className="mb-4">
+            <Col>
+              <h4>Venue Manager</h4>
+              <p>You currently manage {userVenues.length} venues.</p>
+            </Col>
+          </Row>
 
-      {/* Upcoming Bookings Section */}
-      <Row>
-        <Col>
-          <h4>Upcoming Bookings</h4>
-          {loading ? (
-            <p>Loading bookings...</p>
-          ) : userBookings.length > 0 ? (
-            <ul>
-              {userBookings.map((booking) => (
-                <li key={booking.id}>
-                  <strong>{booking.venue.name}</strong> - {new Date(booking.dateFrom).toLocaleDateString()}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No upcoming bookings.</p>
-          )}
-        </Col>
-      </Row>
+          {/* Contact Section */}
+          <Row className="mb-4">
+            <Col>
+              <h4>Contact</h4>
+              <p>Email: {profile.email}</p>
+            </Col>
+          </Row>
+          <Button variant="primary cta-button" onClick={handleCreateVenue}>
+            Create Venue
+          </Button>
+
+          {/* Managed Venues Section */}
+          <Row>
+            <Col>
+              <h4>Managed Venues</h4>
+              {loading ? (
+                <p>Loading venues...</p>
+              ) : userVenues.length > 0 ? (
+                <ul>
+                  {userVenues.map((venue) => (
+                    <li key={venue.id}>
+                      <strong>{venue.name}</strong> - Located in {venue.location?.city || "N/A"}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No venues managed yet.</p>
+              )}
+            </Col>
+          </Row>
+        </>
+      ) : (
+        <>
+          {/* Upcoming Bookings Section */}
+          <Row>
+            <Col>
+              <h4>Upcoming Bookings</h4>
+              {loading ? (
+                <p>Loading bookings...</p>
+              ) : userBookings.length > 0 ? (
+                <ul>
+                  {userBookings.map((booking) => (
+                    <li key={booking.id}>
+                      <strong>{booking.venue.name}</strong> - {new Date(booking.dateFrom).toLocaleDateString()}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No upcoming bookings.</p>
+              )}
+            </Col>
+          </Row>
+        </>
+      )}
       {/* Modal for Editing Profile */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>

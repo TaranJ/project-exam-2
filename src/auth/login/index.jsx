@@ -1,4 +1,5 @@
 import { save } from "../../utils/storage/save";
+import { fetchProfile } from "../../utils/api/fetchprofile";
 
 export const loginUser = async (email, password) => {
   const URL = `${import.meta.env.VITE_APIBase}auth/login`;
@@ -18,8 +19,10 @@ export const loginUser = async (email, password) => {
 
     const { accessToken, ...profile } = (await response.json()).data;
     save("token", accessToken);
-    save("profile", profile);
-    return profile;
+    const fullProfile = await fetchProfile(profile.name, accessToken);
+    save("profile", fullProfile);
+
+    return fullProfile;
   } catch (error) {
     console.error("Error logging in:", error);
     throw error;
