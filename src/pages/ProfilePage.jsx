@@ -170,7 +170,7 @@ const ProfilePage = () => {
                           <Link to={`/venue/${venue.id}`}>
                             <img
                               src={venue.media[0]?.url || "https://via.placeholder.com/300"}
-                              className="browse-img w-100"
+                              className="browse-img w-100 profile-venue-img"
                               alt={venue.name || "Venue image"}
                             />
                           </Link>

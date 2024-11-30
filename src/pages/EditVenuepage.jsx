@@ -125,7 +125,7 @@ const EditVenuePage = () => {
     try {
       await updateVenue(id, submitData, token, apiKey);
       alert("Venue updated successfully!");
-      navigate("/venue/:id");
+      navigate(`/venue/${id}`);
     } catch (err) {
       setError("Failed to update venue. Please try again.");
     } finally {

@@ -18,23 +18,33 @@ export const fetchVenuesForManager = async (managerName) => {
   const url = `${import.meta.env.VITE_APIBase}holidaze/venues?_owner=true`;
 
   try {
-    const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        "X-Noroff-API-Key": apiKey,
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`Failed to fetch venues: ${response.statusText}`);
+    let page = 1;
+    const limit = 100;
+    let allVenues = [];
+    let hasMore = true;
+
+    while (hasMore) {
+      const response = await fetch(`${url}&limit=${limit}&page=${page}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          "X-Noroff-API-Key": apiKey,
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch venues: ${response.statusText}`);
+      }
+
+      const venues = await response.json();
+      const venueList = Array.isArray(venues) ? venues : venues.data || [];
+      const filteredVenues = venueList.filter((venue) => venue.owner?.name === managerName);
+      allVenues = [...allVenues, ...filteredVenues];
+      hasMore = venueList.length === limit;
+      page += 1;
     }
 
-    const venues = await response.json();
-    const venueList = Array.isArray(venues) ? venues : venues.data || [];
-    const filteredVenues = venueList.filter((venue) => venue.owner?.name === managerName);
-
-    console.log("Filtered venues for manager:", filteredVenues);
-    return filteredVenues;
+    console.log("Filtered venues for manager:", allVenues);
+    return allVenues;
   } catch (error) {
     console.error("Error fetching venues:", error);
     return [];
