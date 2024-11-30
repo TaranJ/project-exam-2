@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { Container, Row, Col, Button, Image, Modal, Form } from "react-bootstrap";
 import { load } from "../utils/storage/load";
-import { fetchAllBookingsForUser } from "../utils/api/fetchbookings";
-import { updateProfile } from "../utils/api/updateprofile";
+import { fetchAllBookingsForUser, fetchBookingsForVenue } from "../utils/api/fetchbookings";
 import { fetchVenuesForManager } from "../utils/api/fetchvenues";
-import { useNavigate } from "react-router-dom";
+import { updateProfile } from "../utils/api/updateprofile";
 
 const ProfilePage = () => {
   const [userBookings, setUserBookings] = useState([]);
   const [userVenues, setUserVenues] = useState([]);
+  const [bookingsData, setBookingsData] = useState({});
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [updatedProfile, setUpdatedProfile] = useState({
@@ -60,6 +61,21 @@ const ProfilePage = () => {
 
     getUserData();
   }, [profile?.name, profile?.venueManager, userVenues.length, userBookings.length]);
+
+  useEffect(() => {
+    const fetchAllBookingsForVenues = async () => {
+      if (userVenues.length === 0) return;
+
+      const bookingsMap = {};
+      for (const venue of userVenues) {
+        const bookings = await fetchBookingsForVenue(venue.id);
+        bookingsMap[venue.id] = bookings;
+      }
+      setBookingsData(bookingsMap);
+    };
+
+    fetchAllBookingsForVenues();
+  }, [userVenues]);
 
   const handleSubmit = async () => {
     try {
@@ -135,24 +151,74 @@ const ProfilePage = () => {
           </Button>
 
           {/* Managed Venues Section */}
-          <Row>
-            <Col>
-              <h4>Managed Venues</h4>
+          <Container fluid className="my-5">
+            <div className="mb-4">
+              <h2 className="fs-5">Managed Venues</h2>
+            </div>
+            <div className="row justify-content-center">
               {loading ? (
                 <p>Loading venues...</p>
-              ) : userVenues.length > 0 ? (
-                <ul>
-                  {userVenues.map((venue) => (
-                    <li key={venue.id}>
-                      <strong>{venue.name}</strong> - Located in {venue.location?.city || "N/A"}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
+              ) : userVenues.length === 0 ? (
                 <p>No venues managed yet.</p>
+              ) : (
+                userVenues.map((venue) => (
+                  <div key={venue.id} className="col-12 col-md-6 mb-4">
+                    <div className="card">
+                      {/* Image Row */}
+                      <div className="row">
+                        <div className="col-12">
+                          <Link to={`/venue/${venue.id}`}>
+                            <img
+                              src={venue.media[0]?.url || "https://via.placeholder.com/300"}
+                              className="browse-img w-100 profile-venue-img"
+                              alt={venue.name || "Venue image"}
+                            />
+                          </Link>
+                        </div>
+                      </div>
+                      {/* Information Row */}
+                      <div className="row">
+                        <div className="col-3">
+                          <div className="card-body">
+                            <h5 className="card-title mb-1">{venue.name}</h5>
+                            <p className="card-text mb-3">
+                              {venue.description?.length > 100
+                                ? venue.description.slice(0, 100) + "..."
+                                : venue.description || "No description available"}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <div className="card-body">
+                            <h5 className="card-title mb-1">Bookings</h5>
+                            {bookingsData[venue.id]?.length > 0 ? (
+                              <ul className="bookings-list">
+                                {bookingsData[venue.id].map((booking) => (
+                                  <li key={booking.id}>
+                                    {new Date(booking.dateFrom).toLocaleDateString()} - {new Date(booking.dateTo).toLocaleDateString()} (
+                                    {booking.guests} guests)
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <p>No bookings yet.</p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="col-3">
+                          <div className="card-body text-center">
+                            <Link to={`/edit-venue/${venue.id}`}>
+                              <Button className="btn btn-link edit-venue-btn">Edit Venue</Button>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
               )}
-            </Col>
-          </Row>
+            </div>
+          </Container>
         </>
       ) : (
         <>

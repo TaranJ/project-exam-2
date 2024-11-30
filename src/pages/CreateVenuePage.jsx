@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import { load } from "../utils/storage/load";
 import { createVenue } from "../utils/api/createvenue";
+import { useNavigate } from "react-router-dom";
 
 const CreateVenuePage = () => {
   const [venueData, setVenueData] = useState({
@@ -23,6 +24,7 @@ const CreateVenuePage = () => {
 
   const token = load("token");
   const apiKey = import.meta.env.VITE_APIKey;
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -44,12 +46,10 @@ const CreateVenuePage = () => {
     setError("");
 
     try {
-      const data = await createVenue(venueData, token, apiKey); // Use the external function
+      const data = await createVenue(venueData, token, apiKey);
       console.log("Venue created successfully:", data);
       alert("Venue created successfully!");
-
-      // Optionally redirect the user
-      // Example: window.location.href = '/profile';
+      navigate("/profile");
     } catch (err) {
       setError("Failed to create venue. Please try again.");
     } finally {

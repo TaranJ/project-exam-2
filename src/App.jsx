@@ -14,6 +14,7 @@ import RegisterPage from "./pages/RegisterPage";
 import VenuePage from "./pages/VenuePage";
 import LoginPage from "./pages/LoginPage";
 import CreateVenuePage from "./pages/CreateVenuePage";
+import EditVenuePage from "./pages/EditVenuepage";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/venue/:id" element={<VenuePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/new-venue" element={<CreateVenuePage />} />
+          <Route path="/edit-venue/:id" element={<EditVenuePage />} />
         </Routes>
       </Layout>
     </Router>
