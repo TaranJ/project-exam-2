@@ -1,0 +1,12 @@
+.bookings-list {
+  font-size: 0.8rem;
+  list-style-type: none;
+}
+
+ul.bookings-list {
+  padding-left: 0px;
+}
+
+.edit-venue-btn {
+  text-decoration: none;
+}
