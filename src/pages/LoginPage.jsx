@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 import { Button, Form, Spinner, Alert } from "react-bootstrap";
 import { loginUser } from "../auth/login";
 
@@ -26,6 +27,10 @@ function LoginPage() {
 
   return (
     <div className="login-page">
+      <Helmet>
+        <title>Login | Holidaze</title>
+        <meta name="description" content={"Log in to your Holidaze account to manage bookings, edit your profile, and explore exclusive offers."} />
+      </Helmet>
       <Form onSubmit={handleSubmit}>
         {/* Email Input */}
         <Form.Group controlId="email">

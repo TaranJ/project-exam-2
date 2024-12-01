@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 import { Form, Button, Container } from "react-bootstrap";
 import { load } from "../utils/storage/load";
 import { createVenue } from "../utils/api/createvenue";
@@ -59,6 +60,10 @@ const CreateVenuePage = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>Create new venue | Holidaze</title>
+        <meta name="description" content={"List your property on Holidaze by adding a new venue, complete with photos, details, and pricing."} />
+      </Helmet>
       <h3>Create a New Venue</h3>
       {error && <div className="alert alert-danger">{error}</div>}
       <Form onSubmit={handleSubmit}>

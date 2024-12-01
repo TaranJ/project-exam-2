@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import { Button, Container, Row, Col, Modal, Form, Table } from "react-bootstrap";
 import Calendar from "react-calendar";
 import { createBooking } from "../utils/api/createbooking";
@@ -138,6 +139,10 @@ function VenuePage() {
 
   return (
     <div className="venue-page">
+      <Helmet>
+        <title>{venue.name} | Holidaze</title>
+        <meta name="description" content={`Explore the details of venue: ${venue.name}.`} />
+      </Helmet>
       <Container className="my-5" style={{ maxWidth: "1200px" }}>
         <div className="venue-image mb-5">
           <img src={venue.media[0]?.url} alt={venue.name} className="img-fluid" style={{ maxHeight: "500px", width: "100%", objectFit: "cover" }} />

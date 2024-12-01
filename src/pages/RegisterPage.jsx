@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 import { Button, Form } from "react-bootstrap";
 import { registerUser } from "../auth/register";
 
@@ -26,30 +27,36 @@ function RegisterPage() {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Group controlId="name">
-        <Form.Label>Name</Form.Label>
-        <Form.Control type="text" placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} />
-      </Form.Group>
+    <div>
+      <Helmet>
+        <title>Register | Holidaze</title>
+        <meta name="description" content={"Create a new account on Holidaze to book your next vacation rental and manage your bookings."} />
+      </Helmet>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="name">
+          <Form.Label>Name</Form.Label>
+          <Form.Control type="text" placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} />
+        </Form.Group>
 
-      <Form.Group controlId="email">
-        <Form.Label>Email</Form.Label>
-        <Form.Control type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      </Form.Group>
+        <Form.Group controlId="email">
+          <Form.Label>Email</Form.Label>
+          <Form.Control type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </Form.Group>
 
-      <Form.Group controlId="password">
-        <Form.Label>Password</Form.Label>
-        <Form.Control type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      </Form.Group>
+        <Form.Group controlId="password">
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        </Form.Group>
 
-      <Form.Group controlId="venueManager">
-        <Form.Check type="checkbox" label="Are you a venue manager?" checked={venueManager} onChange={() => setVenueManager((prev) => !prev)} />
-      </Form.Group>
+        <Form.Group controlId="venueManager">
+          <Form.Check type="checkbox" label="Are you a venue manager?" checked={venueManager} onChange={() => setVenueManager((prev) => !prev)} />
+        </Form.Group>
 
-      <Button variant="primary" type="submit">
-        Register
-      </Button>
-    </Form>
+        <Button variant="primary" type="submit">
+          Register
+        </Button>
+      </Form>
+    </div>
   );
 }
 

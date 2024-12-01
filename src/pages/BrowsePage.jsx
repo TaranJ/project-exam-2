@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
 import { searchVenues } from "../utils/search";
@@ -64,6 +65,10 @@ function BrowsePage() {
 
   return (
     <div className="browsepage">
+      <Helmet>
+        <title>Browse | Holidaze</title>
+        <meta name="description" content={"Browse through a variety of venues, from cozy homes to luxurious retreats, for your perfect getaway."} />
+      </Helmet>
       {/* Search Section */}
       <div
         className="search-section pt-5 mt-4"

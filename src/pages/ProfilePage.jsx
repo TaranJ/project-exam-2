@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
 import { Container, Row, Col, Button, Image, Modal, Form } from "react-bootstrap";
 import { load } from "../utils/storage/load";
@@ -119,6 +120,10 @@ const ProfilePage = () => {
 
   return (
     <Container className="my-5">
+      <Helmet>
+        <title>{profile?.name} | Holidaze</title>
+        <meta name="description" content={"View and manage your personal information, bookings, and preferences on your Holidaze profile."} />
+      </Helmet>
       {/* Profile Section */}
       <Row className="mb-5">
         <Col md={3} className="text-center">
