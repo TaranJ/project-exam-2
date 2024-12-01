@@ -7,7 +7,7 @@ export const fetchVenues = async () => {
 };
 
 export const fetchVenueById = async (id) => {
-  const URL = `${import.meta.env.VITE_APIBase}holidaze/venues/${id}`;
+  const URL = `${import.meta.env.VITE_APIBase}holidaze/venues/${id}?_owner=true&_bookings=true`;
 
   return fetchData(URL);
 };

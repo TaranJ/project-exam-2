@@ -48,11 +48,6 @@ const fetchPaginatedBookings = async (filterFunction = () => true) => {
   return allBookings;
 };
 
-// Function to fetch bookings for a specific venue
-export const fetchBookingsForVenue = async (venueId) => {
-  return fetchPaginatedBookings((booking) => booking.venue.id === venueId);
-};
-
 // Function to fetch all bookings for a user
 export const fetchAllBookingsForUser = async () => {
   return fetchPaginatedBookings();

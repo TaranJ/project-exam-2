@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Button, Container, Row, Col, Modal, Form } from "react-bootstrap";
+import { Button, Container, Row, Col, Modal, Form, Table } from "react-bootstrap";
 import Calendar from "react-calendar";
-// import "react-calendar/dist/Calendar.css";
-import { fetchBookingsForVenue } from "../utils/api/fetchbookings";
 import { createBooking } from "../utils/api/createbooking";
 import { load } from "../utils/storage/load";
 import { fetchVenueById } from "../utils/api/fetchvenues";
@@ -27,36 +25,32 @@ function VenuePage() {
   const [showModal, setShowModal] = useState(false);
 
   const token = load("token");
+  const loggedInUser = load("profile");
 
   useEffect(() => {
     const getVenueAndBookings = async () => {
       try {
         setLoading(true);
 
-        // Fetch venue data, regardless of login state
         const fetchedVenue = await fetchVenueById(id);
-        setVenue(fetchedVenue.data);
+        const { data } = fetchedVenue;
+        setVenue(data);
 
-        // If there's no token, we skip fetching bookings data
-        if (token) {
-          const bookings = await fetchBookingsForVenue(id);
+        const unavailableDates = data.bookings.flatMap((booking) => {
+          const dateFrom = new Date(booking.dateFrom);
+          const dateTo = new Date(booking.dateTo);
+          const datesInRange = [];
 
-          const unavailableDates = bookings.flatMap((booking) => {
-            const dateFrom = new Date(booking.dateFrom);
-            const dateTo = new Date(booking.dateTo);
-            const datesInRange = [];
+          for (let d = dateFrom; d <= dateTo; d.setDate(d.getDate() + 1)) {
+            datesInRange.push(new Date(d));
+          }
 
-            for (let d = dateFrom; d <= dateTo; d.setDate(d.getDate() + 1)) {
-              datesInRange.push(new Date(d));
-            }
+          return datesInRange;
+        });
 
-            return datesInRange;
-          });
-
-          setBookedDates(unavailableDates);
-        }
+        setBookedDates(unavailableDates);
       } catch (error) {
-        setError("Error fetching venue or bookings");
+        setError("Error fetching venue data");
         console.error(error);
       } finally {
         setLoading(false);
@@ -64,7 +58,7 @@ function VenuePage() {
     };
 
     getVenueAndBookings();
-  }, [id, token]);
+  }, [id]);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -82,7 +76,6 @@ function VenuePage() {
     return bookedDates.some((bookedDate) => bookedDate.toDateString() === date.toDateString());
   };
 
-  // Handle check-in date selection
   const handleCheckInChange = (date) => {
     setCheckInDate(date);
     if (checkOutDate && date >= checkOutDate) {
@@ -90,14 +83,12 @@ function VenuePage() {
     }
   };
 
-  // Handle check-out date selection
   const handleCheckOutChange = (date) => {
     if (date > checkInDate) {
       setCheckOutDate(date);
     }
   };
 
-  // Open the booking modal
   const openBookingModal = () => {
     if (!checkInDate || !checkOutDate) {
       alert("Please select both check-in and check-out dates.");
@@ -106,7 +97,7 @@ function VenuePage() {
 
     if (!token) {
       alert("You must be logged in to make a booking.");
-      navigate("/login"); // Redirect to login page if not logged in
+      navigate("/login");
       return;
     }
 
@@ -131,13 +122,19 @@ function VenuePage() {
 
       const bookingResponse = await createBooking(bookingDetails);
       console.log("Booking successful:", bookingResponse);
-      setShowModal(false); // Close the modal after successful booking
+      setShowModal(false);
       alert("Booking successful!");
     } catch (error) {
       console.error("Booking failed:", error);
       alert("Error creating booking. Please try again.");
     }
   };
+
+  const handleEditVenue = () => {
+    navigate(`/edit-venue/${id}`);
+  };
+
+  const isOwner = loggedInUser && loggedInUser.email === venue.owner.email;
 
   return (
     <div className="venue-page">
@@ -175,35 +172,66 @@ function VenuePage() {
           </Col>
         </Row>
         {token && (
-          <>
-            <div className="mt-5 text-center">
-              <Button variant="primary" size="lg" className="cta-button book-btn" onClick={openBookingModal}>
-                Book
-              </Button>
-            </div>
-            <div className="calendar-container mt-5">
-              <h4 className="text-center mb-3">Select Your Stay Dates</h4>
-              {/* Wrapper for two calendars */}
-              <div className="calendar-wrapper">
-                <div className="calendar">
-                  <h5>Check-in Date</h5>
-                  <Calendar minDate={new Date()} value={checkInDate} onChange={handleCheckInChange} tileDisabled={isDateUnavailable} />
+          <div className="mt-5 text-center">
+            {isOwner ? (
+              <>
+                <Button variant="warning" size="lg" className="cta-button book-btn" onClick={handleEditVenue}>
+                  Edit Venue
+                </Button>
+                <div className="owner-bookings mt-5">
+                  <h4 className="text-center mb-3">Current Bookings</h4>
+                  <Table striped bordered hover>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Check-In</th>
+                        <th>Check-Out</th>
+                        <th>Guests</th>
+                        <th>Booker</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {venue.bookings.map((booking, index) => (
+                        <tr key={booking.id}>
+                          <td>{index + 1}</td>
+                          <td>{new Date(booking.dateFrom).toLocaleDateString()}</td>
+                          <td>{new Date(booking.dateTo).toLocaleDateString()}</td>
+                          <td>{booking.guests}</td>
+                          <td>{booking.customer.name}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
                 </div>
-                <div className="calendar">
-                  <h5>Check-out Date</h5>
-                  <Calendar
-                    minDate={checkInDate || new Date()}
-                    value={checkOutDate}
-                    onChange={handleCheckOutChange}
-                    tileDisabled={isDateUnavailable}
-                  />
+              </>
+            ) : (
+              <>
+                <Button variant="primary" size="lg" className="cta-button book-btn" onClick={openBookingModal}>
+                  Book
+                </Button>
+                <div className="calendar-container mt-5">
+                  <h4 className="text-center mb-3">Select Your Stay Dates</h4>
+                  <div className="calendar-wrapper">
+                    <div className="calendar">
+                      <h5>Check-in Date</h5>
+                      <Calendar minDate={new Date()} value={checkInDate} onChange={handleCheckInChange} tileDisabled={isDateUnavailable} />
+                    </div>
+                    <div className="calendar">
+                      <h5>Check-out Date</h5>
+                      <Calendar
+                        minDate={checkInDate || new Date()}
+                        value={checkOutDate}
+                        onChange={handleCheckOutChange}
+                        tileDisabled={isDateUnavailable}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </>
+              </>
+            )}
+          </div>
         )}
       </Container>
-      {/* Booking Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Booking Details</Modal.Title>
@@ -231,4 +259,5 @@ function VenuePage() {
     </div>
   );
 }
+
 export default VenuePage;
