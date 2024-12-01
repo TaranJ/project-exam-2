@@ -124,52 +124,55 @@ const ProfilePage = () => {
         <title>{profile?.name} | Holidaze</title>
         <meta name="description" content={"View and manage your personal information, bookings, and preferences on your Holidaze profile."} />
       </Helmet>
+
       {/* Profile Section */}
       <Row className="mb-5">
-        <Col md={3} className="text-center">
-          <Image
-            src={profile?.avatar?.url}
-            alt={profile?.avatar?.alt}
-            roundedCircle
-            style={{ width: "150px", height: "150px", objectFit: "cover" }}
-          />
-        </Col>
-        <Col md={9}>
-          <h3>{profile?.name}</h3>
-          <p>{profile?.bio || "No bio available."}</p>
+        <Col md={2} className="pe-0">
+          <Image src={profile?.avatar?.url} alt={profile?.avatar?.alt} style={{ width: "100px", height: "100px", objectFit: "cover" }} />
           <p>
-            <Button variant="link" onClick={() => setShowModal(true)}>
+            <Button variant="link" className="ps-0 pt-3 update-profile" onClick={() => setShowModal(true)}>
               Update your profile
             </Button>
           </p>
         </Col>
+        <Col md={3} className="align-content-center">
+          <h3 className="text-uppercase">{profile?.name}</h3>
+          <p>{profile?.bio || "No bio available."}</p>
+        </Col>
+
+        {/* Venue Manager Section */}
+        {profile?.venueManager && (
+          <Col md={3} className="align-content-center">
+            <h4 className="fs-5">Venue manager</h4>
+            <p>You currently manage {profile._count.venues} venues.</p>
+          </Col>
+        )}
+
+        {/* Conditional rendering of the Contact Section based on venueManager */}
+        {profile?.venueManager && (
+          <Col md={3} className="align-content-center">
+            <h4 className="fs-5">Contact</h4>
+            <p>Email: {profile.email}</p>
+          </Col>
+        )}
       </Row>
+
+      {/* Conditional rendering for Venue Manager sections */}
       {profile?.venueManager ? (
         <>
-          {/* Venue Manager Section */}
-          <Row className="mb-4">
-            <Col>
-              <h4>Venue Manager</h4>
-              <p>You currently manage {profile._count.venues} venues.</p>
-            </Col>
-          </Row>
-
-          {/* Contact Section */}
-          <Row className="mb-4">
-            <Col>
-              <h4>Contact</h4>
-              <p>Email: {profile.email}</p>
-            </Col>
-          </Row>
-          <Button variant="primary cta-button" onClick={handleCreateVenue}>
-            Create Venue
-          </Button>
-
           {/* Managed Venues Section */}
           <Container fluid className="my-5">
-            <div className="mb-4">
-              <h2 className="fs-5">Managed Venues</h2>
-            </div>
+            <Row className="d-flex justify-content-between align-items-center mb-4">
+              <Col>
+                <h2 className="fs-5">Managed Venues</h2>
+              </Col>
+              <Col className="text-end">
+                <Button variant="primary cta-button" onClick={handleCreateVenue}>
+                  Create Venue
+                </Button>
+              </Col>
+            </Row>
+
             <div className="row justify-content-center">
               {loading ? (
                 <div className="loader-wrapper">
@@ -227,7 +230,7 @@ const ProfilePage = () => {
                         <div className="col-3">
                           <div className="card-body text-center">
                             <Link to={`/edit-venue/${venue.id}`}>
-                              <Button className="btn btn-link edit-venue-btn">Edit Venue</Button>
+                              <Button className="btn btn-link edit-venue-btn">Edit venue</Button>
                             </Link>
                           </div>
                         </div>
@@ -242,28 +245,61 @@ const ProfilePage = () => {
       ) : (
         <>
           {/* Upcoming Bookings Section */}
-          <Row>
-            <Col>
-              <h4>Upcoming Bookings</h4>
+          <Container fluid className="my-5">
+            <div className="mb-4">
+              <h2 className="fs-5">Upcoming Bookings</h2>
+            </div>
+            <div className="row justify-content-center">
               {loading ? (
                 <div className="loader-wrapper">
                   <div className="loader"></div>
                 </div>
-              ) : userBookings.length > 0 ? (
-                <ul>
-                  {userBookings.map((booking) => (
-                    <li key={booking.id}>
-                      <strong>{booking.venue.name}</strong> - {new Date(booking.dateFrom).toLocaleDateString()}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
+              ) : userBookings.length === 0 ? (
                 <p>No upcoming bookings.</p>
+              ) : (
+                userBookings.map((booking) => (
+                  <div key={booking.id} className="col-12 col-md-6 mb-4">
+                    <div className="card">
+                      {/* Image Row */}
+                      <div className="row">
+                        <div className="col-12">
+                          <Link to={`/venue/${booking.venue.id}`}>
+                            <img
+                              src={booking.venue.media[0]?.url || "https://via.placeholder.com/300"}
+                              className="browse-img w-100 profile-venue-img"
+                              alt={booking.venue.name || "Booking venue image"}
+                            />
+                          </Link>
+                        </div>
+                      </div>
+                      {/* Information Row */}
+                      <div className="row">
+                        <div className="col-3">
+                          <div className="card-body pt-2">
+                            <h5 className="card-title mb-1">{booking.venue.name}</h5>
+                          </div>
+                        </div>
+                        <div className="col-9 d-flex align-items-center">
+                          <div className="card-body pt-2">
+                            <p className="card-text mb-1">
+                              <strong>Date:</strong> {new Date(booking.dateFrom).toLocaleDateString()} -{" "}
+                              {new Date(booking.dateTo).toLocaleDateString()}
+                            </p>
+                            <p className="card-text mb-1">
+                              <strong>Guests:</strong> {booking.guests}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
               )}
-            </Col>
-          </Row>
+            </div>
+          </Container>
         </>
       )}
+
       {/* Modal for Editing Profile */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>

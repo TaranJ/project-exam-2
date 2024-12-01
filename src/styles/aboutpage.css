@@ -1,0 +1,17 @@
+.about-img {
+  height: 260px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.hero-img-about {
+  background-size: "cover";
+  background-position: "center";
+  height: "400px";
+  width: "100%";
+}
+
+.heading {
+  letter-spacing: 0.5rem;
+  font-weight: 100;
+}
