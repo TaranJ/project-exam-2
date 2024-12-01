@@ -28,6 +28,7 @@ const EditVenuePage = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const token = load("token");
   const apiKey = import.meta.env.VITE_APIKey;
@@ -96,6 +97,9 @@ const EditVenuePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setFieldErrors({});
+
     if (
       !venueData.name ||
       !venueData.description ||
@@ -109,7 +113,6 @@ const EditVenuePage = () => {
     }
 
     setLoading(true);
-    setError("");
 
     const submitData = {
       name: venueData.name,
@@ -121,14 +124,25 @@ const EditVenuePage = () => {
       meta: venueData.meta,
     };
 
-    console.log("Submitting data:", submitData);
-
     try {
-      await updateVenue(id, submitData, token, apiKey);
+      await updateVenue(id, submitData, token);
       alert("Venue updated successfully!");
       navigate(`/venue/${id}`);
     } catch (err) {
-      setError("Failed to update venue. Please try again.");
+      if (err.errors) {
+        // Map field-specific errors
+        const fieldErrors = {};
+        err.errors.forEach((error) => {
+          if (error.path) {
+            const fieldPath = error.path.join(".");
+            fieldErrors[fieldPath] = error.message;
+          }
+        });
+
+        setFieldErrors(fieldErrors);
+      } else {
+        setError("Failed to update venue. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -158,6 +172,7 @@ const EditVenuePage = () => {
       </Helmet>
 
       {error && <div className="alert alert-danger">{error}</div>}
+
       {loading ? (
         <p>Loading...</p>
       ) : (
@@ -177,6 +192,7 @@ const EditVenuePage = () => {
                       placeholder="Enter venue name"
                       required
                     />
+                    {fieldErrors["name"] && <div className="text-danger">{fieldErrors["name"]}</div>}
                   </Form.Group>
 
                   <Form.Group className="mb-4" controlId="formVenueDescription">
@@ -200,6 +216,7 @@ const EditVenuePage = () => {
                       onChange={handleInputChange}
                       placeholder="Enter venue image URL"
                     />
+                    {fieldErrors["media.0.url"] && <div className="text-danger">{fieldErrors["media.0.url"]}</div>}
                   </Form.Group>
 
                   <Form.Group className="mb-4" controlId="formVenueAddress">
