@@ -7,8 +7,13 @@ ul.bookings-list {
   padding-left: 0px;
 }
 
-.edit-venue-btn {
+.edit-venue-btn,
+.update-profile {
   text-decoration: none;
+}
+
+.edit-venue-btn:hover {
+  background-color: transparent;
 }
 
 .profile-venue-img {
@@ -24,4 +29,13 @@ ul.bookings-list {
 
 .cancel-btn:hover {
   background-color: rgb(180, 4, 4);
+}
+
+.profile-pic {
+  height: 50px;
+}
+
+.update-profile {
+  font-size: 0.9rem;
+  color: rgb(79, 121, 160);
 }
