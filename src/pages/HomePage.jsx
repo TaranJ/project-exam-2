@@ -44,7 +44,9 @@ function HomePage() {
               <button className="btn cta-button">Register</button>
             </Link>
             <p className="mx-4 fw-light mb-0 fs-4">|</p>
-            <button className="btn cta-button-2">Login</button>
+            <Link to="/login">
+              <button className="btn cta-button-2">Login</button>
+            </Link>
           </div>
         </div>
       </div>
