@@ -8,15 +8,4 @@
 @import "/src/styles/browsepage.css";
 @import "/src/styles/venuepage.css";
 @import "/src/styles/profilepage.css";
-
-body {
-  font-family: Roboto Condensed, sans-serif;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5 {
-  font-family: Oxygen, sans-serif;
-}
+@import "/src/styles/editvenuepage.css";

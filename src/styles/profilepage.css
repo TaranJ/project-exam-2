@@ -16,3 +16,12 @@ ul.bookings-list {
   height: 300px;
   object-fit: cover;
 }
+
+.cancel-btn {
+  padding: 5px 20px;
+  background-color: rgb(150, 0, 0);
+}
+
+.cancel-btn:hover {
+  background-color: rgb(180, 4, 4);
+}

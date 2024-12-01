@@ -288,10 +288,10 @@ const ProfilePage = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button variant="secondary" className="cta-button cancel-btn" onClick={() => setShowModal(false)}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
+          <Button variant="primary" className="cta-button" onClick={handleSubmit}>
             Save Changes
           </Button>
         </Modal.Footer>

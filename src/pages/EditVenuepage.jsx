@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Form, Button, Container } from "react-bootstrap";
+import { Form, Button, Container, Col, Row } from "react-bootstrap";
 import { load } from "../utils/storage/load";
 import { fetchVenueById } from "../utils/api/fetchvenues";
 import { useParams, useNavigate } from "react-router-dom";
@@ -156,83 +156,119 @@ const EditVenuePage = () => {
           content={"Edit your venue details, update pricing, availability, and more to keep your listing fresh and relevant."}
         />
       </Helmet>
-      <h3>Edit Venue</h3>
+
       {error && <div className="alert alert-danger">{error}</div>}
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="formVenueName">
-            <Form.Label>Venue Name</Form.Label>
-            <Form.Control type="text" name="name" value={venueData.name} onChange={handleInputChange} placeholder="Enter venue name" required />
-          </Form.Group>
+        <Container fluid="md" className="d-flex justify-content-center pt-5 min-vh-100">
+          <Row className="w-100">
+            <Col xs={12} md={8} lg={6} className="mx-auto">
+              <div className="form-box mt-5 mb-5">
+                <h3 className="fs-4 mb-4">Edit Venue</h3>
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group className="mb-4" controlId="formVenueName">
+                    <Form.Label className="mb-0">Venue name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="name"
+                      value={venueData.name}
+                      onChange={handleInputChange}
+                      placeholder="Enter venue name"
+                      required
+                    />
+                  </Form.Group>
 
-          <Form.Group controlId="formVenueDescription">
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              as="textarea"
-              name="description"
-              value={venueData.description}
-              onChange={handleInputChange}
-              placeholder="Enter venue description"
-              required
-            />
-          </Form.Group>
+                  <Form.Group className="mb-4" controlId="formVenueDescription">
+                    <Form.Label className="mb-0">Description</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      name="description"
+                      value={venueData.description}
+                      onChange={handleInputChange}
+                      placeholder="Enter venue description"
+                      required
+                    />
+                  </Form.Group>
 
-          <Form.Group controlId="formVenueImage">
-            <Form.Label>Image URL</Form.Label>
-            <Form.Control type="text" name="mediaUrl" value={venueData.mediaUrl} onChange={handleInputChange} placeholder="Enter venue image URL" />
-          </Form.Group>
+                  <Form.Group className="mb-4" controlId="formVenueImage">
+                    <Form.Label className="mb-0">Image URL</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="mediaUrl"
+                      value={venueData.mediaUrl}
+                      onChange={handleInputChange}
+                      placeholder="Enter venue image URL"
+                    />
+                  </Form.Group>
 
-          <Form.Group controlId="formVenueAddress">
-            <Form.Label>Address</Form.Label>
-            <Form.Control
-              type="text"
-              name="address"
-              value={venueData.location.address}
-              onChange={handleInputChange}
-              placeholder="Enter venue address"
-              required
-            />
-          </Form.Group>
+                  <Form.Group className="mb-4" controlId="formVenueAddress">
+                    <Form.Label className="mb-0">Address</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="address"
+                      value={venueData.location.address}
+                      onChange={handleInputChange}
+                      placeholder="Enter venue address"
+                      required
+                    />
+                  </Form.Group>
 
-          <Form.Group controlId="formVenueCity">
-            <Form.Label>City</Form.Label>
-            <Form.Control type="text" name="city" value={venueData.location.city} onChange={handleInputChange} placeholder="Enter city" required />
-          </Form.Group>
+                  <Form.Group className="mb-4" controlId="formVenueCity">
+                    <Form.Label className="mb-0">City</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="city"
+                      value={venueData.location.city}
+                      onChange={handleInputChange}
+                      placeholder="Enter city"
+                      required
+                    />
+                  </Form.Group>
 
-          <Form.Group controlId="formVenuePrice">
-            <Form.Label>Price</Form.Label>
-            <Form.Control type="number" name="price" value={venueData.price} onChange={handleInputChange} placeholder="Enter price" required />
-          </Form.Group>
+                  <Form.Group className="mb-4" controlId="formVenuePrice">
+                    <Form.Label className="mb-0">Price per night</Form.Label>
+                    <Form.Control
+                      type="number"
+                      name="price"
+                      value={venueData.price}
+                      onChange={handleInputChange}
+                      placeholder="Enter price"
+                      required
+                    />
+                  </Form.Group>
 
-          <Form.Group controlId="formMaxGuests">
-            <Form.Label>Max Guests</Form.Label>
-            <Form.Control
-              type="number"
-              name="maxGuests"
-              value={venueData.maxGuests}
-              onChange={handleInputChange}
-              placeholder="Enter max guests"
-              required
-            />
-          </Form.Group>
+                  <Form.Group className="mb-4" controlId="formMaxGuests">
+                    <Form.Label className="mb-0">Max Guests</Form.Label>
+                    <Form.Control
+                      type="number"
+                      name="maxGuests"
+                      value={venueData.maxGuests}
+                      onChange={handleInputChange}
+                      placeholder="Enter max guests"
+                      required
+                    />
+                  </Form.Group>
 
-          <Form.Group controlId="formVenueAmenities">
-            <Form.Label>Amenities</Form.Label>
-            <Form.Check type="checkbox" name="wifi" label="WiFi" checked={venueData.meta.wifi} onChange={handleInputChange} />
-            <Form.Check type="checkbox" name="parking" label="Parking" checked={venueData.meta.parking} onChange={handleInputChange} />
-            <Form.Check type="checkbox" name="breakfast" label="Breakfast" checked={venueData.meta.breakfast} onChange={handleInputChange} />
-            <Form.Check type="checkbox" name="pets" label="Pets Allowed" checked={venueData.meta.pets} onChange={handleInputChange} />
-          </Form.Group>
+                  <Form.Group className="mb-4" controlId="formVenueAmenities">
+                    <Form.Label>Amenities</Form.Label>
+                    <Form.Check type="checkbox" name="wifi" label="WiFi" checked={venueData.meta.wifi} onChange={handleInputChange} />
+                    <Form.Check type="checkbox" name="parking" label="Parking" checked={venueData.meta.parking} onChange={handleInputChange} />
+                    <Form.Check type="checkbox" name="breakfast" label="Breakfast" checked={venueData.meta.breakfast} onChange={handleInputChange} />
+                    <Form.Check type="checkbox" name="pets" label="Pets Allowed" checked={venueData.meta.pets} onChange={handleInputChange} />
+                  </Form.Group>
 
-          <Button variant="primary" type="submit" disabled={loading}>
-            {loading ? "Updating..." : "Update Venue"}
-          </Button>
-          <Button variant="danger" onClick={handleDelete} disabled={loading} style={{ marginLeft: "10px" }}>
-            Delete Venue
-          </Button>
-        </Form>
+                  <Button variant="primary" className="cta-button" type="submit" disabled={loading}>
+                    {loading ? "Updating..." : "Update Venue"}
+                  </Button>
+                  <Button variant="danger" className="cta-button delete-btn" onClick={handleDelete} disabled={loading} style={{ marginLeft: "10px" }}>
+                    Delete Venue
+                  </Button>
+                </Form>
+              </div>
+            </Col>
+          </Row>
+        </Container>
       )}
     </Container>
   );
