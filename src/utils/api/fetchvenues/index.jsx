@@ -70,8 +70,6 @@ export const fetchVenuesForManager = async (managerName) => {
       hasMore = venueList.length === limit;
       page += 1;
     }
-
-    console.log("Filtered venues for manager:", allVenues);
     return allVenues;
   } catch (error) {
     console.error("Error fetching venues:", error);

@@ -32,7 +32,6 @@ function LoginPage() {
 
     try {
       const response = await loginUser(email, password);
-      console.log("Login successful:", response);
       window.location.href = "/";
     } catch (error) {
       setError("Invalid email or password");

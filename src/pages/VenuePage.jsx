@@ -163,7 +163,6 @@ function VenuePage() {
       };
 
       const bookingResponse = await createBooking(bookingDetails);
-      console.log("Booking successful:", bookingResponse);
       setShowModal(false);
       alert("Booking successful!");
     } catch (error) {
