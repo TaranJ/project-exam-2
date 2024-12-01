@@ -62,7 +62,11 @@ function VenuePage() {
   }, [id]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="loader-wrapper venue-loader">
+        <div className="loader"></div>
+      </div>
+    );
   }
 
   if (error) {

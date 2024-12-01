@@ -1,6 +1,7 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100;1,100&family=Oxygen:wght@300;400;700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
 
+@import "/src/styles/globals.css";
 @import "/src/styles/header.css";
 @import "/src/styles/footer.css";
 @import "/src/styles/homepage.css";

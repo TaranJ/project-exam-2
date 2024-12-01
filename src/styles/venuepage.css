@@ -84,3 +84,10 @@
     max-width: 100%; /* Calendar should take full width on smaller screens */
   }
 }
+
+.venue-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

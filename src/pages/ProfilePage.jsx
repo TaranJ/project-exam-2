@@ -172,7 +172,9 @@ const ProfilePage = () => {
             </div>
             <div className="row justify-content-center">
               {loading ? (
-                <p>Loading venues...</p>
+                <div className="loader-wrapper">
+                  <div className="loader"></div>
+                </div>
               ) : userVenues.length === 0 ? (
                 <p>No venues managed yet.</p>
               ) : (
@@ -244,7 +246,9 @@ const ProfilePage = () => {
             <Col>
               <h4>Upcoming Bookings</h4>
               {loading ? (
-                <p>Loading bookings...</p>
+                <div className="loader-wrapper">
+                  <div className="loader"></div>
+                </div>
               ) : userBookings.length > 0 ? (
                 <ul>
                   {userBookings.map((booking) => (
