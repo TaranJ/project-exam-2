@@ -55,15 +55,15 @@ function AboutPage() {
 
         <Row className="my-5 justify-content-center">
           <Col md={4}>
-            <Image src="src/images/cabin-7497449_1920.jpg" fluid alt="Cabin by a lake" className="mb-2 about-img" />
+            <Image src="../src/images/cabin-7497449_1920.jpg" fluid alt="Cabin by a lake" className="mb-2 about-img" />
             <p>Find your perfect vacation spot.</p>
           </Col>
           <Col md={4}>
-            <Image src="src/images/bedroom-8052036_1920.png" fluid alt="Luxury bedroom with large window" className="mb-2 about-img" />
+            <Image src="../src/images/bedroom-8052036_1920.png" fluid alt="Luxury bedroom with large window" className="mb-2 about-img" />
             <p>Experience luxury stays with Holidaze.</p>
           </Col>
           <Col md={4}>
-            <Image src="src/images/castle-3889535_1920.jpg" fluid alt="Old castle by a lake" className="mb-2 about-img" />
+            <Image src="../src/images/castle-3889535_1920.jpg" fluid alt="Old castle by a lake" className="mb-2 about-img" />
             <p>Adventure awaits in stunning destinations.</p>
           </Col>
         </Row>
