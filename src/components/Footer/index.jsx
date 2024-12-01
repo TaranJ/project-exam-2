@@ -3,6 +3,14 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo-holidaze.png";
 
+/**
+ * Footer component that displays the company's logo, contact information,
+ * and a link to the "About us" page.
+ *
+ * @component
+ * @returns {JSX.Element} A footer containing the logo, contact details, and a link.
+ */
+
 function Footer() {
   return (
     <Container fluid className="footer">

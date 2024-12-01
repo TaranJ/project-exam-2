@@ -4,9 +4,23 @@ import { Helmet } from "react-helmet";
 import heroImage from "../images/ai-generated-8774912_1920.jpg";
 import { fetchVenues } from "../utils/api/fetchvenues";
 
+/**
+ * HomePage component displays the main landing page of the application,
+ * featuring a hero section with a call to action, and a list of latest venues.
+ *
+ * It fetches the latest venues when the component mounts and displays them.
+ */
 function HomePage() {
   const [venues, setVenues] = useState([]);
 
+  /**
+   * Fetches the latest venues data on component mount.
+   * Updates the `venues` state with the fetched venue data.
+   *
+   * @async
+   * @function
+   * @returns {void}
+   */
   useEffect(() => {
     const getVenues = async () => {
       try {
@@ -26,6 +40,7 @@ function HomePage() {
         <title>Home | Holidaze</title>
         <meta name="description" content={"Welcome to Holidaze! Explore amazing venues and plan your next vacation with ease."} />
       </Helmet>
+
       <div
         className="hero-section"
         style={{

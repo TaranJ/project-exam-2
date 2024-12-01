@@ -7,6 +7,13 @@ import { fetchAllBookingsForUser } from "../utils/api/fetchbookings";
 import { fetchVenuesForManager, fetchVenueById } from "../utils/api/fetchvenues";
 import { updateProfile } from "../utils/api/updateprofile";
 
+/**
+ * ProfilePage component is responsible for displaying and managing the user's profile,
+ * including their bio, avatar, upcoming bookings, and venues if they are a venue manager.
+ * It allows users to update their profile information and view their bookings or venues.
+ *
+ * @component
+ */
 const ProfilePage = () => {
   const [userBookings, setUserBookings] = useState([]);
   const [userVenues, setUserVenues] = useState([]);
@@ -22,6 +29,10 @@ const ProfilePage = () => {
   const profile = load("profile");
   const navigate = useNavigate();
 
+  /**
+   * Fetches the user data, including bookings or venues, based on whether the user is a venue manager.
+   * Updates the state for bookings, venues, and profile.
+   */
   useEffect(() => {
     const getUserData = async () => {
       if (!profile) return;
@@ -64,6 +75,10 @@ const ProfilePage = () => {
     getUserData();
   }, [profile?.name, profile?.venueManager, userVenues.length, userBookings.length]);
 
+  /**
+   * Fetches venues and their associated bookings if the user is a venue manager.
+   * Updates the bookings data for each venue.
+   */
   useEffect(() => {
     const fetchVenuesAndBookings = async () => {
       if (userVenues.length === 0) return;
@@ -88,6 +103,10 @@ const ProfilePage = () => {
     fetchVenuesAndBookings();
   }, [userVenues]);
 
+  /**
+   * Handles the profile update by submitting the updated profile information.
+   * If successful, it closes the modal and displays a success message.
+   */
   const handleSubmit = async () => {
     try {
       const newProfile = await updateProfile(profile.name, updatedProfile);
@@ -98,6 +117,12 @@ const ProfilePage = () => {
     }
   };
 
+  /**
+   * Handles changes to the profile form inputs.
+   * Updates the profile state accordingly based on the input name.
+   *
+   * @param {Object} e - The input change event.
+   */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name.startsWith("avatar")) {
@@ -114,6 +139,9 @@ const ProfilePage = () => {
     }
   };
 
+  /**
+   * Navigates to the page for creating a new venue.
+   */
   const handleCreateVenue = () => {
     navigate("/new-venue");
   };
@@ -157,7 +185,7 @@ const ProfilePage = () => {
         )}
       </Row>
 
-      {/* Conditional rendering for Venue Manager sections */}
+      {/* Venue Manager Sections */}
       {profile?.venueManager ? (
         <>
           {/* Managed Venues Section */}
@@ -173,6 +201,7 @@ const ProfilePage = () => {
               </Col>
             </Row>
 
+            {/* Venue cards */}
             <div className="row justify-content-center">
               {loading ? (
                 <div className="loader-wrapper">
@@ -184,7 +213,7 @@ const ProfilePage = () => {
                 userVenues.map((venue) => (
                   <div key={venue.id} className="col-12 col-md-6 mb-4">
                     <div className="card">
-                      {/* Image Row */}
+                      {/* Venue image and details */}
                       <div className="row">
                         <div className="col-12">
                           <Link to={`/venue/${venue.id}`}>
@@ -196,7 +225,6 @@ const ProfilePage = () => {
                           </Link>
                         </div>
                       </div>
-                      {/* Information Row */}
                       <div className="row">
                         <div className="col-3">
                           <div className="card-body">
@@ -260,7 +288,7 @@ const ProfilePage = () => {
                 userBookings.map((booking) => (
                   <div key={booking.id} className="col-12 col-md-6 mb-4">
                     <div className="card">
-                      {/* Image Row */}
+                      {/* Booking Image and Details */}
                       <div className="row">
                         <div className="col-12">
                           <Link to={`/venue/${booking.venue.id}`}>
@@ -272,7 +300,6 @@ const ProfilePage = () => {
                           </Link>
                         </div>
                       </div>
-                      {/* Information Row */}
                       <div className="row">
                         <div className="col-3">
                           <div className="card-body pt-2">

@@ -5,6 +5,15 @@ import logo from "../../images/logo-holidaze.png";
 import { load } from "../../utils/storage/load";
 import { logout } from "../../auth/logout";
 
+/**
+ * Header component that displays the navigation bar with links to different pages.
+ * It conditionally renders "Profile" and "Logout" links based on the presence of a valid token.
+ * If no token is found, the "Login" link is shown instead.
+ *
+ * @component
+ * @returns {JSX.Element} A navigation bar with links to Home, Browse accommodations, Profile, and Login/Logout.
+ */
+
 function Header() {
   const token = load("token");
   const navigate = useNavigate();

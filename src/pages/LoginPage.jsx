@@ -3,12 +3,28 @@ import { Helmet } from "react-helmet";
 import { Button, Form, Spinner, Alert, Container, Row, Col } from "react-bootstrap";
 import { loginUser } from "../auth/login";
 
+/**
+ * LoginPage component allows users to log in to their account using email and password.
+ * It manages the submission of login credentials and handles loading and error states.
+ *
+ * @component
+ */
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  /**
+   * Handles form submission, attempts to log in the user.
+   * If the login is successful, the user is redirected to the home page.
+   * If there's an error, an error message is displayed.
+   *
+   * @async
+   * @function handleSubmit
+   * @param {Object} e - The submit event object.
+   * @returns {void}
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -31,6 +47,7 @@ function LoginPage() {
         <title>Login | Holidaze</title>
         <meta name="description" content={"Log in to your Holidaze account to manage bookings, edit your profile, and explore exclusive offers."} />
       </Helmet>
+
       <Container fluid="md" className="d-flex justify-content-center pt-5 min-vh-100">
         <Row className="w-100">
           <Col xs={12} md={8} lg={6} className="mx-auto">
