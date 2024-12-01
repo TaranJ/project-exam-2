@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
 import { Form, Button, Container } from "react-bootstrap";
 import { load } from "../utils/storage/load";
 import { fetchVenueById } from "../utils/api/fetchvenues";
@@ -88,7 +89,7 @@ const EditVenuePage = () => {
     } else {
       setVenueData((prevData) => ({
         ...prevData,
-        [name]: type === "checkbox" ? checked : value,
+        [name]: type === "checkbox" ? checked : type === "number" ? parseFloat(value) || 0 : value,
       }));
     }
   };
@@ -148,6 +149,13 @@ const EditVenuePage = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>Edit venue | Holidaze</title>
+        <meta
+          name="description"
+          content={"Edit your venue details, update pricing, availability, and more to keep your listing fresh and relevant."}
+        />
+      </Helmet>
       <h3>Edit Venue</h3>
       {error && <div className="alert alert-danger">{error}</div>}
       {loading ? (

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import heroImage from "../images/ai-generated-8774912_1920.jpg";
 import { fetchVenues } from "../utils/api/fetchvenues";
 
@@ -21,6 +22,10 @@ function HomePage() {
 
   return (
     <div>
+      <Helmet>
+        <title>Home | Holidaze</title>
+        <meta name="description" content={"Welcome to Holidaze! Explore amazing venues and plan your next vacation with ease."} />
+      </Helmet>
       <div
         className="hero-section"
         style={{

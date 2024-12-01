@@ -45,7 +45,14 @@ function Header() {
             )}
             {token && (
               <Nav.Item>
-                <Link to="#logout" className="nav-link" onClick={() => logout(navigate)}>
+                <Link
+                  to="#logout"
+                  className="nav-link"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    logout(navigate);
+                  }}
+                >
                   Logout
                 </Link>
               </Nav.Item>

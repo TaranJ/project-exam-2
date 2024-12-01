@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useNavigate, Link } from "react-router-dom";
 import { Container, Row, Col, Button, Image, Modal, Form } from "react-bootstrap";
 import { load } from "../utils/storage/load";
-import { fetchAllBookingsForUser, fetchBookingsForVenue } from "../utils/api/fetchbookings";
-import { fetchVenuesForManager } from "../utils/api/fetchvenues";
+import { fetchAllBookingsForUser } from "../utils/api/fetchbookings";
+import { fetchVenuesForManager, fetchVenueById } from "../utils/api/fetchvenues";
 import { updateProfile } from "../utils/api/updateprofile";
 
 const ProfilePage = () => {
@@ -11,6 +12,7 @@ const ProfilePage = () => {
   const [userVenues, setUserVenues] = useState([]);
   const [bookingsData, setBookingsData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [bookingsLoading, setBookingsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [updatedProfile, setUpdatedProfile] = useState({
     bio: "",
@@ -63,18 +65,27 @@ const ProfilePage = () => {
   }, [profile?.name, profile?.venueManager, userVenues.length, userBookings.length]);
 
   useEffect(() => {
-    const fetchAllBookingsForVenues = async () => {
+    const fetchVenuesAndBookings = async () => {
       if (userVenues.length === 0) return;
-
+      setBookingsLoading(true);
       const bookingsMap = {};
-      for (const venue of userVenues) {
-        const bookings = await fetchBookingsForVenue(venue.id);
-        bookingsMap[venue.id] = bookings;
+
+      try {
+        for (const venue of userVenues) {
+          const response = await fetchVenueById(venue.id);
+          if (response.data) {
+            bookingsMap[venue.id] = response.data.bookings || [];
+          }
+        }
+        setBookingsData(bookingsMap);
+      } catch (err) {
+        console.error("Error fetching bookings for venues:", err);
+      } finally {
+        setBookingsLoading(false);
       }
-      setBookingsData(bookingsMap);
     };
 
-    fetchAllBookingsForVenues();
+    fetchVenuesAndBookings();
   }, [userVenues]);
 
   const handleSubmit = async () => {
@@ -109,6 +120,10 @@ const ProfilePage = () => {
 
   return (
     <Container className="my-5">
+      <Helmet>
+        <title>{profile?.name} | Holidaze</title>
+        <meta name="description" content={"View and manage your personal information, bookings, and preferences on your Holidaze profile."} />
+      </Helmet>
       {/* Profile Section */}
       <Row className="mb-5">
         <Col md={3} className="text-center">
@@ -191,7 +206,9 @@ const ProfilePage = () => {
                         <div className="col-6">
                           <div className="card-body">
                             <h5 className="card-title mb-1">Bookings</h5>
-                            {bookingsData[venue.id]?.length > 0 ? (
+                            {bookingsLoading ? (
+                              <p>Loading bookings...</p>
+                            ) : bookingsData[venue.id]?.length > 0 ? (
                               <ul className="bookings-list">
                                 {bookingsData[venue.id].map((booking) => (
                                   <li key={booking.id}>
