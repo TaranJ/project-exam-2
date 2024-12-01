@@ -172,7 +172,9 @@ const ProfilePage = () => {
             </div>
             <div className="row justify-content-center">
               {loading ? (
-                <p>Loading venues...</p>
+                <div className="loader-wrapper">
+                  <div className="loader"></div>
+                </div>
               ) : userVenues.length === 0 ? (
                 <p>No venues managed yet.</p>
               ) : (
@@ -244,7 +246,9 @@ const ProfilePage = () => {
             <Col>
               <h4>Upcoming Bookings</h4>
               {loading ? (
-                <p>Loading bookings...</p>
+                <div className="loader-wrapper">
+                  <div className="loader"></div>
+                </div>
               ) : userBookings.length > 0 ? (
                 <ul>
                   {userBookings.map((booking) => (
@@ -284,10 +288,10 @@ const ProfilePage = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button variant="secondary" className="cta-button cancel-btn" onClick={() => setShowModal(false)}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
+          <Button variant="primary" className="cta-button" onClick={handleSubmit}>
             Save Changes
           </Button>
         </Modal.Footer>

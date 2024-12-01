@@ -31,7 +31,6 @@ function BrowsePage() {
   const handleSearch = async (e) => {
     e.preventDefault();
 
-    // If the search query is empty, fetch all venues
     if (query.trim() === "") {
       setLoading(true);
       try {
@@ -46,7 +45,6 @@ function BrowsePage() {
       return;
     }
 
-    // Otherwise, perform a search
     setLoading(true);
     try {
       const searchedVenues = await searchVenues(query);
@@ -102,6 +100,11 @@ function BrowsePage() {
         <div className="mb-4">
           <h2 className="fs-5">Latest accommodations</h2>
         </div>
+        {loading && (
+          <div className="loader-wrapper browsepage-loader">
+            <div className="loader"></div>
+          </div>
+        )}
         <div className="row justify-content-center">
           {venues.length === 0 ? (
             <p>No accommodations found.</p>

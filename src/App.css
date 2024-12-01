@@ -1,21 +1,11 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100;1,100&family=Oxygen:wght@300;400;700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
 
+@import "/src/styles/globals.css";
 @import "/src/styles/header.css";
 @import "/src/styles/footer.css";
 @import "/src/styles/homepage.css";
 @import "/src/styles/browsepage.css";
 @import "/src/styles/venuepage.css";
 @import "/src/styles/profilepage.css";
-
-body {
-  font-family: Roboto Condensed, sans-serif;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5 {
-  font-family: Oxygen, sans-serif;
-}
+@import "/src/styles/editvenuepage.css";
