@@ -44,7 +44,6 @@ export const createBooking = async ({ dateFrom, dateTo, guests, venueId }) => {
       }),
     });
 
-    console.log("Booking created:", response);
     return response;
   } catch (error) {
     console.error("Error creating booking:", error);

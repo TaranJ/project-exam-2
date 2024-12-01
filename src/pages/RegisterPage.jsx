@@ -50,7 +50,6 @@ function RegisterPage() {
 
     try {
       const response = await registerUser(userData);
-      console.log("User registered successfully:", response);
       setShowSuccessModal(true);
     } catch (error) {
       if (error.errors) {

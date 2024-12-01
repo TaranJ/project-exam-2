@@ -1,32 +1,29 @@
-import { fetchData } from "..";
-
 /**
- * Creates a new venue by sending a POST request to the venues API with the provided venue data.
- * The request includes the necessary authorization token and API key in the headers.
- * If the venue is successfully created, it returns the response data.
- * If an error occurs, it throws an error.
+ * Creates a new venue by sending a POST request to the API with the provided venue data.
  *
- * @async
- * @function createVenue
- * @param {Object} venueData - The details of the venue to be created.
+ * @param {Object} venueData - The data for the venue to be created.
  * @param {string} venueData.name - The name of the venue.
- * @param {string} venueData.description - The description of the venue.
- * @param {string} venueData.mediaUrl - The URL of the venue's media (e.g., an image).
- * @param {number} venueData.price - The price of the venue.
- * @param {number} venueData.maxGuests - The maximum number of guests the venue can accommodate.
+ * @param {string} venueData.description - A description of the venue.
+ * @param {string} venueData.mediaUrl - The URL of the image for the venue.
+ * @param {number} venueData.price - The price per night for the venue.
+ * @param {number} venueData.maxGuests - The maximum number of guests allowed at the venue.
+ * @param {boolean} venueData.wifi - Whether the venue provides WiFi.
+ * @param {boolean} venueData.parking - Whether the venue provides parking.
+ * @param {boolean} venueData.breakfast - Whether breakfast is included at the venue.
+ * @param {boolean} venueData.pets - Whether pets are allowed at the venue.
  * @param {string} venueData.address - The address of the venue.
  * @param {string} venueData.city - The city where the venue is located.
- * @param {boolean} venueData.wifi - Whether the venue has WiFi.
- * @param {boolean} venueData.parking - Whether the venue offers parking.
- * @param {boolean} venueData.breakfast - Whether breakfast is available at the venue.
- * @param {boolean} venueData.pets - Whether pets are allowed at the venue.
- * @param {string} token - The authorization token required for the request.
- * @param {string} apiKey - The API key required for the request.
- * @returns {Promise<Object>} The response data from the API after creating the venue.
- * @throws {Error} Throws an error if the request fails or if the API returns an error.
+ *
+ * @param {string} token - The authentication token used for authorization in the API request.
+ *
+ * @returns {Promise<Object>} The response data from the API if the venue creation is successful.
+ * @throws {Object} Throws an error object containing error details if the API request fails.
+ *
  */
+export const createVenue = async (venueData, token) => {
+  const apiKey = import.meta.env.VITE_APIKey;
+  const url = `${import.meta.env.VITE_APIBase}holidaze/venues`;
 
-export const createVenue = async (venueData, token, apiKey) => {
   const venuePayload = {
     name: venueData.name,
     description: venueData.description,
@@ -53,23 +50,20 @@ export const createVenue = async (venueData, token, apiKey) => {
     },
   };
 
-  const URL = `${import.meta.env.VITE_APIBase}holidaze/venues`;
+  const options = {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "X-Noroff-API-Key": apiKey,
+    },
+    body: JSON.stringify(venuePayload),
+  };
 
-  try {
-    const response = await fetchData(URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        "X-Noroff-API-Key": apiKey,
-      },
-      body: JSON.stringify(venuePayload),
-    });
-
-    console.log("Venue created:", response);
-    return response;
-  } catch (err) {
-    console.error("Error creating venue:", err);
-    throw err;
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw errorData;
   }
+  return response.json();
 };

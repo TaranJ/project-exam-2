@@ -50,7 +50,6 @@ const EditVenuePage = () => {
       try {
         const venue = await fetchVenueById(id, token, apiKey);
         const { data } = venue;
-        console.log("Fetched venue data:", data);
         setVenueData({
           name: data.name || "",
           description: data.description || "",

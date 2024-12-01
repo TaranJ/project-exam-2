@@ -27,7 +27,6 @@ function HomePage() {
     const getVenues = async () => {
       try {
         const fetchedVenues = await fetchVenues();
-        console.log("Fetched venues:", fetchedVenues);
         setVenues(fetchedVenues.data.slice(0, 4));
       } catch (error) {
         console.error("Error in fetching venues:", error);
