@@ -89,7 +89,7 @@ const EditVenuePage = () => {
     } else {
       setVenueData((prevData) => ({
         ...prevData,
-        [name]: type === "checkbox" ? checked : value,
+        [name]: type === "checkbox" ? checked : type === "number" ? parseFloat(value) || 0 : value,
       }));
     }
   };
