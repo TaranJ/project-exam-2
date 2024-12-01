@@ -7,6 +7,13 @@ import { createBooking } from "../utils/api/createbooking";
 import { load } from "../utils/storage/load";
 import { fetchVenueById } from "../utils/api/fetchvenues";
 
+/**
+ * The VenuePage component displays details of a venue and allows users to book it.
+ * It fetches the venue details, displays information about the venue, and provides a calendar
+ * for the user to select check-in and check-out dates for booking.
+ *
+ * @returns {JSX.Element} The VenuePage component.
+ */
 function VenuePage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -28,6 +35,9 @@ function VenuePage() {
   const token = load("token");
   const loggedInUser = load("profile");
 
+  /**
+   * Fetches venue data and booked dates when the component is mounted.
+   */
   useEffect(() => {
     const getVenueAndBookings = async () => {
       try {
@@ -37,6 +47,7 @@ function VenuePage() {
         const { data } = fetchedVenue;
         setVenue(data);
 
+        // Process the bookings to get all unavailable dates
         const unavailableDates = data.bookings.flatMap((booking) => {
           const dateFrom = new Date(booking.dateFrom);
           const dateTo = new Date(booking.dateTo);
@@ -77,10 +88,23 @@ function VenuePage() {
     return <p>No venue found.</p>;
   }
 
+  /**
+   * Checks if a selected date is unavailable based on booked dates.
+   *
+   * @param {Object} param0 - The date object to check.
+   * @param {Date} param0.date - The date to check.
+   * @returns {boolean} True if the date is unavailable, false otherwise.
+   */
   const isDateUnavailable = ({ date }) => {
     return bookedDates.some((bookedDate) => bookedDate.toDateString() === date.toDateString());
   };
 
+  /**
+   * Handles the change of the check-in date.
+   * Resets check-out date if it is before the new check-in date.
+   *
+   * @param {Date} date - The selected check-in date.
+   */
   const handleCheckInChange = (date) => {
     setCheckInDate(date);
     if (checkOutDate && date >= checkOutDate) {
@@ -88,12 +112,21 @@ function VenuePage() {
     }
   };
 
+  /**
+   * Handles the change of the check-out date.
+   *
+   * @param {Date} date - The selected check-out date.
+   */
   const handleCheckOutChange = (date) => {
     if (date > checkInDate) {
       setCheckOutDate(date);
     }
   };
 
+  /**
+   * Opens the booking modal if the user has selected valid check-in and check-out dates.
+   * Redirects to the login page if the user is not logged in.
+   */
   const openBookingModal = () => {
     if (!checkInDate || !checkOutDate) {
       alert("Please select both check-in and check-out dates.");
@@ -109,6 +142,10 @@ function VenuePage() {
     setShowModal(true);
   };
 
+  /**
+   * Handles the submission of the booking form.
+   * Sends booking details to the API to create a booking.
+   */
   const handleBookingSubmit = async () => {
     const guests = Number(numberOfGuests);
 
@@ -135,10 +172,14 @@ function VenuePage() {
     }
   };
 
+  /**
+   * Redirects to the edit venue page for the owner of the venue.
+   */
   const handleEditVenue = () => {
     navigate(`/edit-venue/${id}`);
   };
 
+  // Checks if the logged-in user is the owner of the venue
   const isOwner = loggedInUser && loggedInUser.email === venue.owner.email;
 
   return (

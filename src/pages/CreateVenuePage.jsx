@@ -5,6 +5,15 @@ import { load } from "../utils/storage/load";
 import { createVenue } from "../utils/api/createvenue";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * CreateVenuePage is a component that allows users to create a new venue listing on Holidaze.
+ * The form collects information such as the venue's name, description, location, price, amenities, and image URL.
+ * After submission, the venue is added to the platform, and the user is redirected to their profile page.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} The form for creating a new venue.
+ */
 const CreateVenuePage = () => {
   const [venueData, setVenueData] = useState({
     name: "",
@@ -27,6 +36,12 @@ const CreateVenuePage = () => {
   const apiKey = import.meta.env.VITE_APIKey;
   const navigate = useNavigate();
 
+  /**
+   * Handles input changes in the form fields and updates the state with the new values.
+   * The values are either updated as a string, number, or boolean (for checkboxes).
+   *
+   * @param {React.ChangeEvent} e - The event triggered by a form input change.
+   */
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -36,6 +51,12 @@ const CreateVenuePage = () => {
     }));
   };
 
+  /**
+   * Handles the form submission. Validates the input fields and attempts to create a venue through the API.
+   * If the submission is successful, the user is redirected to the profile page. Otherwise, an error message is displayed.
+   *
+   * @param {React.FormEvent} e - The event triggered by the form submission.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!venueData.name || !venueData.description || !venueData.address || !venueData.city || !venueData.price) {
@@ -65,7 +86,6 @@ const CreateVenuePage = () => {
         <meta name="description" content={"List your property on Holidaze by adding a new venue, complete with photos, details, and pricing."} />
       </Helmet>
 
-      {error && <div className="alert alert-danger">{error}</div>}
       <Container fluid="md" className="d-flex justify-content-center pt-5 min-vh-100">
         <Row className="w-100">
           <Col xs={12} md={8} lg={6} className="mx-auto">
@@ -137,9 +157,10 @@ const CreateVenuePage = () => {
                     <Form.Check type="checkbox" name="pets" label="Pets Allowed" checked={venueData.pets} onChange={handleInputChange} />
                   </div>
                 </Form.Group>
-                <Button variant="primary" className="cta-button w-100" type="submit" disabled={loading}>
+                <Button variant="primary" className="cta-button w-100 mb-2" type="submit" disabled={loading}>
                   {loading ? "Creating..." : "Create Venue"}
                 </Button>
+                {error && <div className="alert alert-danger">{error}</div>}
               </Form>
             </div>
           </Col>

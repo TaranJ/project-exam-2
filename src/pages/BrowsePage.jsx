@@ -6,12 +6,25 @@ import { searchVenues } from "../utils/search";
 import { fetchVenues } from "../utils/api/fetchvenues";
 import heroImage from "../images/hotel-1831072_1920.jpg";
 
+/**
+ * BrowsePage component displays a list of venues available for booking on Holidaze.
+ * It includes a search bar to filter venues based on user input and a "View More" button
+ * to load more venues in batches.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} The BrowsePage component displaying venues and a search form.
+ */
 function BrowsePage() {
   const [venues, setVenues] = useState([]);
   const [visibleVenues, setVisibleVenues] = useState(15);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Fetches the venues when the component is mounted or when the query changes.
+   * The venues are either fetched from an API or filtered based on the search query.
+   */
   useEffect(() => {
     const getVenues = async () => {
       try {
@@ -28,6 +41,12 @@ function BrowsePage() {
     getVenues();
   }, []);
 
+  /**
+   * Handles the search functionality by calling the searchVenues API with the search query.
+   * If the query is empty, it fetches the default list of venues.
+   *
+   * @param {React.FormEvent} e - The event triggered by the form submission.
+   */
   const handleSearch = async (e) => {
     e.preventDefault();
 
@@ -57,6 +76,9 @@ function BrowsePage() {
     }
   };
 
+  /**
+   * Increases the number of visible venues when the "View More" button is clicked.
+   */
   const handleViewMore = () => {
     setVisibleVenues((prev) => prev + 15);
   };

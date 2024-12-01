@@ -3,6 +3,13 @@ import { Helmet } from "react-helmet";
 import { Container, Row, Col, Image } from "react-bootstrap";
 import heroImageAbout from "../images/seychelles-4916045_1920.jpg";
 
+/**
+ * AboutPage component renders the "About Us" page of the Holidaze platform.
+ * This page provides information about the platform's purpose, services, and features.
+ * It includes a background image, a heading, a description of the platform, and images highlighting vacation rentals.
+ *
+ * @component
+ */
 function AboutPage() {
   return (
     <div>
@@ -56,7 +63,7 @@ function AboutPage() {
             <p>Experience luxury stays with Holidaze.</p>
           </Col>
           <Col md={4}>
-            <Image src="src/images/castle-3889535_1920.jpg" fluid alt="Old caste by a lake" className="mb-2 about-img" />
+            <Image src="src/images/castle-3889535_1920.jpg" fluid alt="Old castle by a lake" className="mb-2 about-img" />
             <p>Adventure awaits in stunning destinations.</p>
           </Col>
         </Row>

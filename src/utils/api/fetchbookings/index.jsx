@@ -1,7 +1,18 @@
 import { load } from "../../storage/load";
 import { fetchData } from "..";
 
-// Utility function to fetch paginated bookings
+/**
+ * Fetches paginated bookings from the API and applies a filter function to the data.
+ * It retrieves bookings in pages, combining all the results until no more data is available.
+ * The function will stop fetching when a page has fewer bookings than the specified perPage limit.
+ *
+ * @async
+ * @function fetchPaginatedBookings
+ * @param {function} [filterFunction = () => true] - A function that filters bookings based on certain criteria.
+ *                                                    By default, it does not filter any bookings (returns all).
+ * @returns {Promise<Array>} A promise that resolves to an array of filtered bookings.
+ * @throws {Error} Throws an error if there is an issue with the API request.
+ */
 const fetchPaginatedBookings = async (filterFunction = () => true) => {
   const token = load("token");
   const apiKey = import.meta.env.VITE_APIKey;
@@ -30,7 +41,6 @@ const fetchPaginatedBookings = async (filterFunction = () => true) => {
       });
 
       if (data && Array.isArray(data.data)) {
-        // Apply the filter function to filter bookings
         allBookings = allBookings.concat(data.data.filter(filterFunction));
       }
 
@@ -48,7 +58,14 @@ const fetchPaginatedBookings = async (filterFunction = () => true) => {
   return allBookings;
 };
 
-// Function to fetch all bookings for a user
+/**
+ * Fetches all bookings for the current user by calling `fetchPaginatedBookings`.
+ * This function is a simplified version that does not apply any filters to the bookings.
+ *
+ * @async
+ * @function fetchAllBookingsForUser
+ * @returns {Promise<Array>} A promise that resolves to an array of all bookings for the user.
+ */
 export const fetchAllBookingsForUser = async () => {
   return fetchPaginatedBookings();
 };

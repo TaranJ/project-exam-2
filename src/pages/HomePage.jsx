@@ -3,10 +3,26 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import heroImage from "../images/ai-generated-8774912_1920.jpg";
 import { fetchVenues } from "../utils/api/fetchvenues";
+import { load } from "../utils/storage/load";
 
+/**
+ * HomePage component displays the main landing page of the application,
+ * featuring a hero section with a call to action, and a list of latest venues.
+ *
+ * It fetches the latest venues when the component mounts and displays them.
+ */
 function HomePage() {
   const [venues, setVenues] = useState([]);
+  const token = load("token");
 
+  /**
+   * Fetches the latest venues data on component mount.
+   * Updates the `venues` state with the fetched venue data.
+   *
+   * @async
+   * @function
+   * @returns {void}
+   */
   useEffect(() => {
     const getVenues = async () => {
       try {
@@ -26,6 +42,7 @@ function HomePage() {
         <title>Home | Holidaze</title>
         <meta name="description" content={"Welcome to Holidaze! Explore amazing venues and plan your next vacation with ease."} />
       </Helmet>
+
       <div
         className="hero-section"
         style={{
@@ -37,18 +54,20 @@ function HomePage() {
           color: "white",
         }}
       >
-        <div className="hero-overlay-home d-flex flex-column align-items-start justify-content-center">
-          <h1 className="mb-3 fs-6 fw-light">Get ready for your next holiday!</h1>
-          <div className="cta-buttons d-flex align-items-center">
-            <Link to="/register">
-              <button className="btn cta-button">Register</button>
-            </Link>
-            <p className="mx-4 fw-light mb-0 fs-4">|</p>
-            <Link to="/login">
-              <button className="btn cta-button-2">Login</button>
-            </Link>
+        {!token && (
+          <div className="hero-overlay-home d-flex flex-column align-items-start justify-content-center">
+            <h1 className="mb-3 fs-6 fw-light">Get ready for your next holiday!</h1>
+            <div className="cta-buttons d-flex align-items-center">
+              <Link to="/register">
+                <button className="btn cta-button">Register</button>
+              </Link>
+              <p className="mx-4 fw-light mb-0 fs-4">|</p>
+              <Link to="/login">
+                <button className="btn cta-button-2">Login</button>
+              </Link>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <div className="container my-5">

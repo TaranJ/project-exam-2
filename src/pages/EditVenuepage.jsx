@@ -7,6 +7,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { updateVenue } from "../utils/api/updatevenue";
 import { deleteVenue } from "../utils/api/deletevenue";
 
+/**
+ * EditVenuePage component allows users to edit details of an existing venue.
+ * It fetches venue data by ID, displays a form with pre-filled values,
+ * allows for updating and deleting the venue, and handles form validation.
+ */
 const EditVenuePage = () => {
   const { id } = useParams();
   const [venueData, setVenueData] = useState({
@@ -34,6 +39,12 @@ const EditVenuePage = () => {
   const apiKey = import.meta.env.VITE_APIKey;
   const navigate = useNavigate();
 
+  /**
+   * Fetches the venue data by ID when the component is mounted.
+   *
+   * @async
+   * @function
+   */
   useEffect(() => {
     const fetchVenue = async () => {
       try {
@@ -68,6 +79,11 @@ const EditVenuePage = () => {
     fetchVenue();
   }, [id, token, apiKey]);
 
+  /**
+   * Handles input changes in the form and updates the `venueData` state.
+   *
+   * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>} e - The change event.
+   */
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -95,6 +111,12 @@ const EditVenuePage = () => {
     }
   };
 
+  /**
+   * Handles form submission for updating the venue.
+   *
+   * @async
+   * @param {React.FormEvent<HTMLFormElement>} e - The form submission event.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -148,6 +170,11 @@ const EditVenuePage = () => {
     }
   };
 
+  /**
+   * Handles venue deletion and prompts the user for confirmation.
+   *
+   * @async
+   */
   const handleDelete = async () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this venue?");
     if (confirmDelete) {
@@ -170,8 +197,6 @@ const EditVenuePage = () => {
           content={"Edit your venue details, update pricing, availability, and more to keep your listing fresh and relevant."}
         />
       </Helmet>
-
-      {error && <div className="alert alert-danger">{error}</div>}
 
       {loading ? (
         <p>Loading...</p>
@@ -281,6 +306,7 @@ const EditVenuePage = () => {
                   <Button variant="danger" className="cta-button delete-btn" onClick={handleDelete} disabled={loading} style={{ marginLeft: "10px" }}>
                     Delete Venue
                   </Button>
+                  {error && <div className="alert alert-danger mt-3">{error}</div>}
                 </Form>
               </div>
             </Col>
