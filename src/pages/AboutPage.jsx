@@ -2,6 +2,9 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import { Container, Row, Col, Image } from "react-bootstrap";
 import heroImageAbout from "../images/seychelles-4916045_1920.jpg";
+import img1 from "../images/cabin-7497449_1920.jpg";
+import img2 from "../images/bedroom-8052036_1920.png";
+import img3 from "../images/castle-3889535_1920.jpg";
 
 /**
  * AboutPage component renders the "About Us" page of the Holidaze platform.
@@ -55,15 +58,15 @@ function AboutPage() {
 
         <Row className="my-5 justify-content-center">
           <Col md={4}>
-            <Image src="../src/images/cabin-7497449_1920.jpg" fluid alt="Cabin by a lake" className="mb-2 about-img" />
+            <Image src={img1} fluid alt="Cabin by a lake" className="mb-2 about-img" />
             <p>Find your perfect vacation spot.</p>
           </Col>
           <Col md={4}>
-            <Image src="../src/images/bedroom-8052036_1920.png" fluid alt="Luxury bedroom with large window" className="mb-2 about-img" />
+            <Image src={img2} fluid alt="Luxury bedroom with large window" className="mb-2 about-img" />
             <p>Experience luxury stays with Holidaze.</p>
           </Col>
           <Col md={4}>
-            <Image src="../src/images/castle-3889535_1920.jpg" fluid alt="Old castle by a lake" className="mb-2 about-img" />
+            <Image src={img3} fluid alt="Old castle by a lake" className="mb-2 about-img" />
             <p>Adventure awaits in stunning destinations.</p>
           </Col>
         </Row>
