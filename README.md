@@ -2,6 +2,8 @@
 
 ## Holidaze
 
+![image](https://taranj.github.io/portfolio2/assets/holidaze-DPt0PPwM.jpg)
+
 ### Description
 
 This is a website for an imagined booking site called Holidaze. Designing and creating it was a project exam for the front-end course at Noroff School of technology and digital media
